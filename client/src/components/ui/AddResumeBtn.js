@@ -5,7 +5,7 @@ import ResumeDialog from './dialogs/ResumeDialog';
 import ResumeNameForm from '../forms/ResumeNameForm';
 
 
-function AddResumeBtn() {
+function AddResumeBtn({setResumeCreated}) {
 
     const [open, setOpen] = React.useState(false);
 
@@ -53,7 +53,13 @@ function AddResumeBtn() {
           handleClickOpen={handleClickOpen}
           handleClose={handleClose}
           open={open}
-          content={<ResumeNameForm setOpenDialog={setOpen} />}
+          content={
+          <ResumeNameForm 
+            setOpenDialog={setOpen} 
+            setResumeCreated={setResumeCreated}
+          />
+          }
+          
         
         />
     </Box>

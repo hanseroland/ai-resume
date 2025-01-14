@@ -28,15 +28,18 @@ app.use('/public/profile', express.static(__dirname + '/public/profile'));
 
 
 //routes
-const cardRouter = require('./routes/cardRoutes');
 const usersRouter = require('./routes/userRoutes');
 const authRouter = require('./routes/authRoutes');
+const resumeRouter = require('./routes/resumeRoutes');
+
+
 
  
 // http://localhost:5000/api/v1/ 
 app.use(`${api}/auth`, authRouter); 
 app.use(`${api}/users`, usersRouter); 
-app.use(`${api}/cards`, cardRouter); 
+app.use(`${api}/resumes`, resumeRouter); 
+
 
 
 

@@ -18,15 +18,7 @@ const secret = process.env.PASS_SEC
 router.post('/register', async (req, res) => {
 
      // Validation avec Joi
-    const schema = Joi.object({
-        email: Joi.string().email().required(),
-        password: Joi.string().min(6).required(),
-        isAdmin: Joi.boolean().optional(),
-    });
-
-    const { error } = schema.validate(req.body);
-    if (error) return res.status(400).send({ success: false, message: error.details[0].message });
-  
+   
     try {
         // Vérifier si l'utilisateur existe déjà
         const userExists = await User.findOne({ email: req.body.email });
@@ -37,6 +29,7 @@ router.post('/register', async (req, res) => {
         // Création d'un nouvel utilisateur
         const hashedPassword = bcrypt.hashSync(req.body.password, 10);
         const newUser = new User({
+          name:req.body.name,
           email: req.body.email,
           password: hashedPassword,
           isAdmin: req.body.isAdmin || false, // Prend la valeur transmise ou utilise false par défaut
@@ -49,6 +42,7 @@ router.post('/register', async (req, res) => {
           message: 'Utilisateur créé avec succès.',
           data: {
             id: savedUser._id,
+            name:savedUser.name,
             email: savedUser.email,
             isAdmin: savedUser.isAdmin,
           },

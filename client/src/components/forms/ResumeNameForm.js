@@ -3,35 +3,48 @@ import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { Box, Button, TextField } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import { useDispatch, useSelector } from 'react-redux';
+import { CreateResume } from '../../api/resumes';
+import { SetCurrentResume } from '../../redux/slices/resumeSlice';
 
 
-const ResumeNameForm = ({setOpenDialog, setRefreshTrigger }) => {
+const ResumeNameForm = ({setOpenDialog,setResumeCreated, setRefreshTrigger }) => {
+
+  const { currentUser } = useSelector(state => state.users);
+  const dispatch = useDispatch();
 
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required('Le nom est obligatoire').trim(),
+    title: Yup.string().required('Le titre du CV est obligatoire').trim(),
   });
 
 
   // Soumission du formulaire
   const handleSubmit = async (values, { resetForm }) => {
     setOpenDialog(false)
-    /*try {
+    try { 
+
       const newValues = {
-        name: values.name,
+        title: values.title,
+        userId: currentUser._id
       };
+
+      console.log("new valuse",newValues)
      
-      const response = await CreateResume(newValues)
+      const response = await CreateResume(newValues) 
       if (response.success) {
-          console.log("oui success")
-          setRefreshTrigger(prev => !prev);
+          //console.log("oui success")
+          dispatch(SetCurrentResume(response.data));
+          setResumeCreated(true)
+          
+          //setRefreshTrigger(prev => !prev);
       }
       resetForm()
       setOpenDialog(false)
     } catch (error) {
-      console.error('Erreur lors de l\'ajout de l\'utilisateur :', error);
+      console.error('Erreur lors de la création du CV :', error);
       alert('Une erreur est survenue.');
-    }*/
+    }
   };
 
 
@@ -40,7 +53,8 @@ const ResumeNameForm = ({setOpenDialog, setRefreshTrigger }) => {
     <Box >
       <Formik
         initialValues={{
-            name: '',
+            title: '',
+            userId:currentUser._id
            
         }}
         validationSchema={validationSchema}
@@ -56,9 +70,9 @@ const ResumeNameForm = ({setOpenDialog, setRefreshTrigger }) => {
                   as={TextField}
                   fullWidth
                   label="Titre du CV"
-                  name="name"
-                  error={touched.name && Boolean(errors.name)}
-                  helperText={touched.name && errors.name}
+                  name="title"
+                  error={touched.title && Boolean(errors.title)}
+                  helperText={touched.title && errors.title}
                 />
               </Grid>
              

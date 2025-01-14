@@ -13,7 +13,6 @@ export const axiosInstance = async (method, url, payload) => {
             }
           },
         ); 
-        console.log("axios instanse token ==",localStorage.getItem('token'))
         return response.data 
     } catch (error) {
         return error;

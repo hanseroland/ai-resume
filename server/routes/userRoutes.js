@@ -2,11 +2,9 @@ const User = require('../models/User')
 const express = require('express')
 const router = express.Router()
 const bcrypt = require('bcryptjs'); 
-const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const multer = require('multer');
 const dotenv = require('dotenv');
-const Joi = require('joi');
 const authMiddleware = require('../middlewares/authMiddleware');
 
 
@@ -217,33 +215,6 @@ router.put('/:id', async (req, res) => {
  });
  
 
-// Ajouter les informations d'un utilisateur existant
-router.post('/', async (req, res) => {
-    const { email, name, profilePicture, phoneNumber, company, jobTitle, socialLinks } = req.body;
-
-    try {
-        // Vérification si l'utilisateur existe
-        const existingUser = await User.findOne({ email });
-        if (!existingUser) {
-            return res.status(404).json({ success: false, message: 'Utilisateur introuvable.' });
-        }
-
-        // Mise à jour des informations supplémentaires
-        existingUser.name = name || existingUser.name;
-        existingUser.profilePicture = profilePicture || existingUser.profilePicture;
-        existingUser.phoneNumber = phoneNumber || existingUser.phoneNumber;
-        existingUser.company = company || existingUser.company;
-        existingUser.jobTitle = jobTitle || existingUser.jobTitle;
-        existingUser.socialLinks = socialLinks || existingUser.socialLinks;
-
-        const updatedUser = await existingUser.save();
-
-        res.status(200).json({ success: true, data: updatedUser });
-    } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-    }
-});
-
 
 //Mise à jour de la photo de profile
 router.put('/update-picture/:id', uploadOptions.single('profilePicture'), async (req,res)=>{
@@ -294,10 +265,6 @@ router.put('/update-picture/:id', uploadOptions.single('profilePicture'), async 
 // Supprimer un utilisateur
 router.delete('/:id', async (req, res) => {
    
-   { /*
-    if (!mongoose.isValidObjectId(req.params.id)) {
-        return res.status(400).json({ success: false, message: 'ID utilisateur invalide.' });
-    } */}
 
     try {
         

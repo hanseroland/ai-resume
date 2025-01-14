@@ -17,35 +17,15 @@ const userSchema = new mongoose.Schema({
     required: true,
     minlength: 6,
   },
+  profilePicture:{
+    type: String,
+    required: false,
+  },
   isAdmin: {
     type: Boolean,
     default:false,
   },
-  profilePicture: {
-    type: String, // URL de l'image de profil
-    default: null,
-  },
-  phoneNumber: {
-    type: String,
-    default: null,
-  },
-  company: {
-    type: String,
-    trim: true,
-    default: null,
-  },
-  jobTitle: {
-    type: String,
-    trim: true,
-    default: null,
-  },
-  cards: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Card', // Référence au modèle Card
-    },
-  ],
-  
+  resumes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Resume' }],
 },
   {
     timestamps: true, // Ajoute createdAt et updatedAt automatiquement
