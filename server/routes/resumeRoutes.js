@@ -12,6 +12,23 @@ const dotenv = require('dotenv');
 dotenv.config();
 const secret = process.env.PASS_SEC
 
+
+
+
+// Afficher les informations d'un seul CV par son id
+router.get('/:id', async (req, res) => {
+    try {
+        const resume = await Resume.findById(req.params.id);
+        if (!resume) {
+            return res.status(404).json({ success: false, message: 'CV introuvable.' });
+        }
+        res.status(200).json({ success: true, data: resume });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// récupérer les CV d'un utilisateur donné en fonction de son ID
 router.get('/user/:userId',async(req,res)=>{
 
   try {

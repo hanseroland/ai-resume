@@ -10,6 +10,7 @@ import NotFoundPage from './pages/NotFoundPage';
 import SignupPage from './pages/SignUpPage';
 import SignInPage from './pages/SignInPage';
 import SimpleLayout from './components/Layouts/SimpleLayout';
+import EditResume from './pages/EditResume';
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
           <Route element={<ResumeLayout />}>
             <Route index element={<Home />} />
             <Route path="/resumes" element={<Resumes />} />
+            <Route path="/resumes/:resumeId/edit" element={<EditResume />} />
             <Route path="/profile" element={<Profile />} />
           </Route>
         </Routes>

@@ -6,7 +6,13 @@ export const GetAllResumes = async () => {
     return response;
 };
 
-// Obtenir tous les cv en fonction du userid
+// Obtenir CV en fonction du resumeId
+export const GetOneResume = async (userId) => {
+    const response = await axiosInstance("get", `/resumes/${userId}`);
+    return response;
+};
+
+// Obtenir tous les cv en fonction du userId
 export const GetUserResumes = async (userId) => {
     const response = await axiosInstance("get", `/resumes/user/${userId}`);
     return response;

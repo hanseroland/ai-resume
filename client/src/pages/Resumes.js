@@ -1,3 +1,4 @@
+
 import React, { useEffect, Suspense } from 'react'
 import { Alert, Box, CircularProgress, Typography } from '@mui/material'
 import Grid from '@mui/material/Grid2';
@@ -15,7 +16,6 @@ function Resumes() {
 
   const [userResumes, setUserResumes] = React.useState([]); // Stocke les CV de l'utilisateur
   const [loading, setLoading] = React.useState(true); // Indique si les données sont en cours de chargement
-  const [error, setError] = React.useState(null); // Stocke les erreurs éventuelles
 
   // Fonction pour récupérer les CV
   const fetchResumes = async () => {
@@ -25,7 +25,6 @@ function Resumes() {
       setUserResumes(response.data || []); // Met à jour les CV
     } catch (err) {
       console.error('Erreur lors de la récupération des CV :', err);
-      setError('Une erreur est survenue lors de la récupération des CV.');
     } finally {
       setLoading(false); // Indique que le chargement est terminé
     }
@@ -33,8 +32,12 @@ function Resumes() {
 
   // useEffect pour récupérer les CV au montage du composant
   useEffect(() => {
-    fetchResumes();
-  }, [resumeCreated]); // Relance la récupération des CV lorsqu'un nouveau CV est créé
+    if (currentUser && currentUser._id) {
+      fetchResumes();
+    } else {
+      setLoading(false);
+    }
+  }, [resumeCreated,currentUser]); // Relance la récupération des CV lorsqu'un nouveau CV est créé
 
 
 
@@ -81,15 +84,26 @@ function Resumes() {
             <Box display="flex" justifyContent="center" py={4}>
               <CircularProgress />
             </Box>
-          ) : error ? (
-            <Alert sx={{height:"40px"}} severity="error">{error}</Alert>
           ) : (
             <>
-              {userResumes.map((resume) => (
-                <Grid key={resume._id} item lg={3} md={4} sm={6} xs={12}>
-                   <ResumeCard resume={resume} />
-                </Grid>
-              ))}
+              {
+                userResumes 
+                
+                ? 
+                  userResumes.map((resume) => (
+                    <Grid key={resume._id} item lg={3} md={4} sm={6} xs={12}>
+                      <ResumeCard resume={resume} />
+                    </Grid>
+                  ))
+                :
+
+                 
+                    <Grid  lg={3} md={4} sm={6} xs={12}>
+                      <Alert sx={{height:"40px"}} severity="info"> Aucun CV </Alert>
+                    </Grid>
+                 
+              }
+             
             </>
           )
           }
