@@ -1,68 +1,102 @@
-import * as React from 'react';
-import Card from '@mui/material/Card';
-import CardHeader from '@mui/material/CardHeader';
-import CardMedia from '@mui/material/CardMedia';
-import IconButton from '@mui/material/IconButton';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { Button, CardActions, CardContent, Typography } from '@mui/material';
-import { Delete, Edit, Notes, Share } from '@mui/icons-material';
-import ArticleIcon from '@mui/icons-material/Article';
+import React from 'react';
+import { Card, CardHeader, CardContent, CardActions, Typography, Button, IconButton } from '@mui/material';
+import { Link } from 'react-router-dom';
+import { Delete, Share, Article, Edit } from '@mui/icons-material';
 
 export default function ResumeCard({ resume }) {
+  return (
+    <Card
+      elevation={8}
+      sx={{
+        maxWidth:375,
+        borderRadius: 3,
+        overflow: 'hidden',
+        background: 'linear-gradient(to bottom right, #f5f5f5, #ffffff)',
+        '&:hover': {
+          transform: 'scale(1.05)',
+          transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+          boxShadow: '0 8px 20px rgba(0, 0, 0, 0.2)',
+        },
+      }}
+    >
+      {/* Header Section */}
+      <CardHeader
+        title={
+          <Typography fontSize={15} variant="h6" fontWeight="bold" noWrap>
+            {resume.title}
+          </Typography>
+        }
+        subheader={
+          <Typography variant="body2" color="textSecondary">
+            Créé le : {new Date(resume.createdAt).toLocaleDateString('fr-FR')}
+          </Typography>
+        }
+        action={
+          <IconButton
+             onClick={() => alert('Supprimer le CV non encore implémenté')}
+          >
+             <Delete color="error" />
+          </IconButton>
+         
+        }
+        sx={{
+          backgroundColor: '#f0f0f0',
+          borderBottom: '1px solid #e0e0e0',
+        }}
+      />
 
+      {/* Content Section */}
+      <CardContent
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          py: 4,
+        }}
+      >
+        <Article color="disabled" sx={{ fontSize:64}} />
+       
+      </CardContent>
 
-    return (
+      {/* Actions Section */}
+      <CardActions
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          px: 2,
+          py: 1.5,
+          backgroundColor: '#fafafa',
+          borderTop: '1px solid #e0e0e0',
+        }}
+      >
+        {/* Edit Button */}
+        <Button
+          component={Link}
+          to={`/resumes/${resume._id}/edit`}
+          variant="outlined"
+          color="inherit"
+          startIcon={<Edit />}
+          sx={{
+            textTransform: 'none',
+            fontWeight: 'bold',
+          }}
+        >
+          Modifier
+        </Button>
 
-        <Card
-            elevation={5}
-            sx={{
-                maxWidth:375,
-                '&:hover': {
-                    transform: "scale(1.05)",
-                    transition: "0.3s ease",
-                    boxShadow: "0 6px 10px rgba(0, 0, 0, 0.3)",
-
-                },
-            }}>
-            <CardHeader
-                sx={{backgroundColor:'rgb(25 118 210)',color:'white'}}
-                title={<Typography  fontWeight="bold" variant="body1" >{resume.title}</Typography>}
-                subheader={<Typography color="textPrimary" variant="body2" >{resume.createdAt}</Typography>}
-
-            />
-
-            <CardContent
-              sx={{
-                display:'flex',
-                justifyContent:'center',
-                alignItems:'center'
-              }}
-            >
-                <ArticleIcon 
-                    fontSize='large'
-                    color="primary"
-                 />
-            </CardContent>
-
-            <CardActions
-              sx={{
-                display:'flex',
-                justifyContent:'flex-end',
-               
-              }}
-              
-            >
-                <IconButton>
-                 <Edit />
-                </IconButton>
-                <IconButton>
-                  <Delete />
-                </IconButton>
-                <IconButton>
-                  <Share />
-                </IconButton>
-            </CardActions>
-
-        </Card>
-    );
+        {/* Share Button */}
+        <IconButton
+          color="secondary"
+          sx={{
+            textTransform: 'none',
+            fontWeight: 'bold',
+          }}
+          onClick={() => alert('Partage non encore implémenté')}
+         >
+           <Share />
+        </IconButton>
+      </CardActions>
+    </Card>
+  );
 }

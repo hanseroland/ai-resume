@@ -6,12 +6,14 @@ import Grid from '@mui/material/Grid2';
 import { useDispatch, useSelector } from 'react-redux';
 import { CreateResume } from '../../api/resumes';
 import { SetCurrentResume } from '../../redux/slices/resumeSlice';
+import { useNavigate } from 'react-router-dom';
 
 
 const ResumeNameForm = ({setOpenDialog,setResumeCreated, setRefreshTrigger }) => {
 
   const { currentUser } = useSelector(state => state.users);
   const dispatch = useDispatch();
+  const navigate = useNavigate()
 
 
   const validationSchema = Yup.object().shape({
@@ -29,18 +31,19 @@ const ResumeNameForm = ({setOpenDialog,setResumeCreated, setRefreshTrigger }) =>
         userId: currentUser._id
       };
 
-      console.log("new valuse",newValues)
+     // console.log("new valuse",newValues)
      
       const response = await CreateResume(newValues) 
       if (response.success) {
           //console.log("oui success")
           dispatch(SetCurrentResume(response.data));
           setResumeCreated(true)
-          
           //setRefreshTrigger(prev => !prev);
       }
       resetForm()
       setOpenDialog(false)
+      navigate(`/resumes/${response.data._id}/edit`)
+      
     } catch (error) {
       console.error('Erreur lors de la création du CV :', error);
       alert('Une erreur est survenue.');
