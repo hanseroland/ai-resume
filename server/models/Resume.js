@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const resumeSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   title: { type: String, required: true },
+  theme: { type: Number},
+  title: { type: String},
   personalInfo: {
     fullName: { type: String },
     jobTitle: { type: String,  },

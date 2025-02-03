@@ -13,7 +13,7 @@ function ResumePreview() {
 
 const {resumeData,setResumeData} = useContext(ResumeInfoContext)
 
-console.log("context",resumeData)
+//console.log("context",resumeData)
   return (
     <Box>
         {/**Infos personnelles */}

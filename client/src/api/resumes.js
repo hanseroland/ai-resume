@@ -23,3 +23,9 @@ export const CreateResume = async (values) => {
     const response = await axiosInstance("post", "/resumes/create",values);
     return response;
 };
+
+//modifier les info personnelles
+export const UpdatePersonalInfo = async (resumeId, values) => {
+    const response = await axiosInstance("put", `/resumes/update-personal-info/${resumeId}`,values);
+    return response;
+};

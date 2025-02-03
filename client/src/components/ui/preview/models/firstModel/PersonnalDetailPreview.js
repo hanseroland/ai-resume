@@ -17,7 +17,7 @@ const PersonalDetailPreview = ({resumeData}) => {
               {resumeData.personalInfo?.fullName}
             </Typography>
             <Typography variant="subtitle1" color="text.secondary">
-              {resumeData?.title || resumeData.personalInfo?.jobTitle}
+              {resumeData.personalInfo?.jobTitle}
             </Typography>
           </Grid>
         </Grid>

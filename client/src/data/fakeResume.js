@@ -5,7 +5,7 @@ export const fakeResume = {
       fullName: "John Doe",
       jobTitle: "Développeur Web",
       address: "123, Rue de la Paix, Paris, France",
-      phone: "+33 6 12 34 56 78",
+      phone: "33612345678",
       email: "johndoe@example.com",
     },
     summary: "Développeur Full Stack expérimenté avec 5 ans d'expérience en conception et développement d'applications web performantes et sécurisées. Passionné par les technologies modernes et le travail en équipe.",

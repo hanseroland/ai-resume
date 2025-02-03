@@ -1,9 +1,14 @@
 import { Box, Button } from '@mui/material'
-import React from 'react'
+import React, { useState } from 'react'
 import PersonalDetailForm from '../forms/PersonalDetailForm'
 import {  Apps, ArrowLeft, ArrowRight } from '@mui/icons-material'
 
-function ResumeFormSection() {
+function ResumeFormSection({resumeId}) {
+
+   const [activeFormIndex, setActiveFormIndex] = useState(5)
+
+   const [enableNext,setEnableNext] = useState(false)
+
   return (
     <Box>
         {/**Head */}
@@ -38,17 +43,22 @@ function ResumeFormSection() {
                 gap:1
               }}
              >
-
-             <Button
+             {
+              activeFormIndex > 1 && 
+                <Button
                 variant="contained"
                 startIcon={<ArrowLeft/>}
                  size="small"
                 sx={{
                   textTransform:'none'
                 }}
+                onClick={()=>setActiveFormIndex(activeFormIndex-1)}
               >
-                Retour
-              </Button> 
+                  Retour
+                </Button> 
+              
+             }
+            
              
               <Button
                 variant="contained"
@@ -57,6 +67,8 @@ function ResumeFormSection() {
                 sx={{
                   textTransform:'none'
                 }}
+                disabled={!enableNext}
+                onClick={()=>setActiveFormIndex(activeFormIndex+1)}
               >
                 Suivant
               </Button> 
@@ -64,7 +76,7 @@ function ResumeFormSection() {
               
            </Box>
         {/**Infos personnelles */}
-        <PersonalDetailForm />
+       {activeFormIndex == 1 ? <PersonalDetailForm resumeId={resumeId} enableNext={(v)=>setEnableNext(v)} /> : null }
         {/**Résumé */}
 
         {/**Compétences */}
