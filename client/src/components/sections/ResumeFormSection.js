@@ -2,6 +2,7 @@ import { Box, Button } from '@mui/material'
 import React, { useState } from 'react'
 import PersonalDetailForm from '../forms/PersonalDetailForm'
 import {  Apps, ArrowLeft, ArrowRight } from '@mui/icons-material'
+import SummaryForm from '../forms/SummaryForm'
 
 function ResumeFormSection({resumeId}) {
 
@@ -78,6 +79,7 @@ function ResumeFormSection({resumeId}) {
         {/**Infos personnelles */}
        {activeFormIndex == 1 ? <PersonalDetailForm resumeId={resumeId} enableNext={(v)=>setEnableNext(v)} /> : null }
         {/**Résumé */}
+        {activeFormIndex == 2 ? <SummaryForm resumeId={resumeId} enableNext={(v)=>setEnableNext(v)} /> : null }
 
         {/**Compétences */}
 

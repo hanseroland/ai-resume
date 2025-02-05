@@ -152,6 +152,39 @@ router.put('/update-personal-info/:resumeId', async (req, res) => {
   }
 });
 
+// Route pour mettre à jour les détails personnels d'un CV
+router.put('/update-summary-info/:resumeId', async (req, res) => {
+  
+  const { resumeId } = req.params;
+  const { summary } = req.body;
+
+  try {
+      // Vérifier si le CV existe
+      const resume = await Resume.findById(resumeId);
+      if (!resume) {
+          return res.status(404).json({ success: false, error: 'CV introuvable.' });
+      }
+
+      // Mise à jour des détails personnels avec l'opérateur `$set`
+      const updatedResume = await Resume.findByIdAndUpdate(
+          resumeId,
+          {$set: {summary : summary}},
+          { new: true } // Retourner le document mis à jour
+      );
+
+      res.status(200).json({
+          success: true,
+          message: "Résumé profil mis à jour avec succès.",
+          data: updatedResume
+      });
+
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, error: "Une erreur est survenue lors de la mise à jour du CV." });
+  }
+});
+
+
 
 
   

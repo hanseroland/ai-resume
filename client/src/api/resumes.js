@@ -29,3 +29,9 @@ export const UpdatePersonalInfo = async (resumeId, values) => {
     const response = await axiosInstance("put", `/resumes/update-personal-info/${resumeId}`,values);
     return response;
 };
+
+//modifier le résumé du profil
+export const UpdateSummaryInfo = async (resumeId, values) => {
+    const response = await axiosInstance("put", `/resumes/update-summary-info/${resumeId}`,values);
+    return response;
+};
