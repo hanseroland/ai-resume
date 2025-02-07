@@ -35,3 +35,9 @@ export const UpdateSummaryInfo = async (resumeId, values) => {
     const response = await axiosInstance("put", `/resumes/update-summary-info/${resumeId}`,values);
     return response;
 };
+
+// Générer du text du CV via l'IA
+export const GenerateText = async (prompt) => {
+    const response = await axiosInstance("post", `/resumes/generate-text`, { prompt });
+    return response;
+};
