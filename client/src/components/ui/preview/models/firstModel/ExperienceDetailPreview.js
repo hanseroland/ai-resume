@@ -1,10 +1,10 @@
-import React from "react";
+import React, { memo } from "react";
 import { Box, Typography, Divider, Stack } from "@mui/material";
 import WorkIcon from "@mui/icons-material/Work";
 import Grid from '@mui/material/Grid2';
 
 
-const ExperienceDetailPreview = ({ resumeData }) => {
+const ExperienceDetailPreview = memo(({ resumeData }) => {
   return (
     <Box
       sx={{
@@ -50,27 +50,27 @@ const ExperienceDetailPreview = ({ resumeData }) => {
                         />
                       </span>
                       {"  "}
-                      {experience.jobTitle || "Titre du poste"}
+                      {experience?.jobTitle || "Titre du poste"}
                     </Typography>
                 
                  
                   <Typography variant="body1" color="textSecondary">
-                    {experience.companyName || "Nom de l'entreprise"} |{" "}
-                    {experience.city && experience.country
-                      ? `${experience.city}, ${experience.country}`
+                    {experience?.companyName || "Nom de l'entreprise"} |{" "}
+                    {experience?.city && experience?.country
+                      ? `${experience?.city}, ${experience?.country}`
                       : "Lieu non spécifié"}
                   </Typography>
                   <Typography variant="body2" color="textSecondary">
-                    {`De ${new Date(experience.startDate).toLocaleDateString(
+                    {`De ${new Date(experience?.startDate).toLocaleDateString(
                       "fr-FR"
                     )} à ${
-                      experience.endDate
-                        ? new Date(experience.endDate).toLocaleDateString("fr-FR")
+                      experience?.endDate
+                        ? new Date(experience?.endDate).toLocaleDateString("fr-FR")
                         : "Aujourd'hui"
                     }`}
                   </Typography>
                   <Typography variant="body2" sx={{ mt: 1, textAlign: "justify" }}>
-                    {experience.description ||
+                    {experience?.workSummary ||
                       "Aucune description fournie pour cette expérience."}
                   </Typography>
                 </Stack>
@@ -85,6 +85,6 @@ const ExperienceDetailPreview = ({ resumeData }) => {
       )}
     </Box>
   );
-};
+});
 
 export default ExperienceDetailPreview;

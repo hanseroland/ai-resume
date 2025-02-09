@@ -5,11 +5,11 @@ import AppBarComponent from './AppBarComponent';
 import Sidebar from './Sidebar';
 import { Outlet, useNavigate } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
-import PeopleIcon from '@mui/icons-material/People';
 import PersonIcon from '@mui/icons-material/Person';
 import { useDispatch, useSelector } from 'react-redux';
 import { GetCurrentUser } from '../../api/users';
 import { SetCurrentUser } from '../../redux/slices/userSlice';
+import ContactPageIcon from '@mui/icons-material/ContactPage';
 
 
 
@@ -55,7 +55,7 @@ const ResumeLayout = () => {
 
   const links = [
     { text: 'Tableau de bord', path: '/', icon: <HomeIcon /> },
-    { text: 'Resumes', path: '/resumes', icon: <PeopleIcon /> },
+    { text: 'Resumes', path: '/resumes', icon: <ContactPageIcon /> },
     { text: 'Profile', path: '/profile', icon: <PersonIcon/> },
   ];
   

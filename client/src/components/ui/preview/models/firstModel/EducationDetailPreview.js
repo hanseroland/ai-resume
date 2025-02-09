@@ -32,8 +32,8 @@ const EducationDetailPreview = ({ resumeData }) => {
       <Divider sx={{ my: 2 }} />
 
       {/* Liste des parcours éducatifs */}
-      {resumeData?.education && resumeData?.education.length > 0 ? (
-        resumeData?.education.map((edu, index) => (
+      {resumeData?.educations && resumeData?.educations.length > 0 ? (
+        resumeData?.educations.map((edu, index) => (
           <Box key={index} mb={4}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={2}>

@@ -41,3 +41,21 @@ export const GenerateText = async (prompt) => {
     const response = await axiosInstance("post", `/resumes/generate-text`, { prompt });
     return response;
 };
+
+// Générer du text du CV via l'IA
+export const GenerateThreeText = async (prompt) => {
+    const response = await axiosInstance("post", `/resumes/generate-three-textes`, { prompt });
+    return response;
+};
+
+//modifier les expériences
+export const UpdateExperiences = async (resumeId, values) => {
+    const response = await axiosInstance("put", `/resumes/update-experiences-info/${resumeId}`,values);
+    return response;
+};
+
+//modifier les educations
+export const UpdateEducations = async (resumeId, values) => {
+    const response = await axiosInstance("put", `/resumes/update-educations-info/${resumeId}`,values);
+    return response;
+};

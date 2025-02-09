@@ -12,7 +12,7 @@ const PersonalDetailPreview = ({resumeData}) => {
       <CardContent>
         <Grid container spacing={2} alignItems="center">
           {/* User Details */}
-          <Grid item xs>
+          <Grid>
             <Typography variant="h5" component="div" fontWeight="bold">
               {resumeData.personalInfo?.fullName}
             </Typography>

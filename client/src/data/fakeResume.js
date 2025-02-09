@@ -30,7 +30,7 @@ export const fakeResume = {
       },
     ],
     skills: ["JavaScript", "React", "Node.js", "MongoDB", "TypeScript", "Docker", "Git"],
-    education: [
+    educations: [
       {
         degree: "Master en Informatique",
         schoolName: "Université Paris-Sorbonne",

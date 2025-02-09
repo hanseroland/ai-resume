@@ -191,7 +191,6 @@ router.put('/update-summary-info/:resumeId', async (req, res) => {
 });
 
 
-
 // Route pour générer du texte pour le CV en fonction d'un prompt
 router.post('/generate-text', async (req, res) => {
   try {
@@ -240,6 +239,160 @@ router.post('/generate-text', async (req, res) => {
     });
   }
 });
+
+// Route pour générer du texte pour le CV en fonction d'un prompt
+router.post('/generate-three-textes', async (req, res) => {
+  try {
+    const { prompt } = req.body;
+    if (!prompt) {
+      return res.status(400).json({ success: false, message: "Le prompt est requis." });
+    }
+
+    // Préparation des messages avec instructions précises pour l'appel de fonction
+    const messages = [
+      {
+        role: "system",
+        content: "Vous êtes un expert en rédaction de CV. Veuillez générer trois résumés de profil différents au format JSON. Chaque résumé doit être un texte concis et professionnel décrivant un profil. Retournez le résultat en appelant la fonction 'generateSummaries'."
+      },
+      {
+        role: "user",
+        content: prompt
+      }
+    ];
+
+    // Définition de la fonction à appeler par l'IA pour retourner un résultat structuré
+    const functions = [
+      {
+        name: "generateSummaries",
+        description: "Génère trois résumés de profil au format JSON.",
+        parameters: {
+          type: "object",
+          properties: {
+            summaries: {
+              type: "array",
+              items: { type: "string" },
+              description: "Liste contenant trois résumés de profil."
+            }
+          },
+          required: ["summaries"]
+        }
+      }
+    ];
+
+    // Appel à l'API avec support de l'appel de fonction
+    const chatCompletion = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo", // Ou "gpt-4" si nécessaire// Modèle supportant le function calling
+      messages: messages,
+      functions: functions,
+      function_call: "auto",  // Permet à l'API de décider d'appeler la fonction si le contexte le justifie
+      max_tokens: 500,
+      temperature: 0.7,
+    });
+
+    const message = chatCompletion.choices[0].message;
+
+    // Si le modèle a choisi d'appeler la fonction, on récupère les arguments passés
+    if (message.function_call) {
+      const argsString = message.function_call.arguments;
+      let functionArgs;
+      try {
+        functionArgs = JSON.parse(argsString);
+      } catch (err) {
+        return res.status(500).json({
+          success: false,
+          message: "Erreur lors de l'analyse des arguments de la fonction.",
+          error: err.message
+        });
+      }
+
+      console.log("les textes:",functionArgs)
+      // functionArgs devrait contenir { summaries: [summary1, summary2, summary3] }
+      return res.status(200).json({
+        success: true,
+        message: "Fonction appelée avec succès.",
+        data: functionArgs
+      });
+    } else {
+      // Cas de repli si l'IA ne retourne pas d'appel de fonction
+      return res.status(200).json({
+        success: true,
+        message: "Texte généré sans appel de fonction.",
+        data: message.content
+      });
+    }
+  } catch (error) {
+    console.error("Erreur lors de la génération du texte:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Une erreur est survenue lors de la génération du texte.",
+      error: error.message
+    });
+  }
+});
+
+// Route pour mettre à jour l'éducation d'un CV
+router.put('/update-educations-info/:resumeId', async (req, res) => {
+  const { resumeId } = req.params;
+  const { educations } = req.body;
+
+  try {
+      // Vérifier si le CV existe
+      const resume = await Resume.findById(resumeId);
+      if (!resume) {
+          return res.status(404).json({ success: false, error: 'CV introuvable.' });
+      }
+
+      // Mise à jour des éducations existantes avec `$set`
+      const updatedResume = await Resume.findByIdAndUpdate(
+          resumeId,
+          { $set: { education: educations } }, // Remplace le champ `education` tout en conservant les autres champs
+          { new: true, runValidators: true } // Retourne le document mis à jour et applique les validations
+      );
+
+      res.status(200).json({
+          success: true,
+          message: "Informations d'éducation mises à jour avec succès.",
+          data: updatedResume
+      });
+
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, error: "Une erreur est survenue lors de la mise à jour des informations d'éducation." });
+  }
+});
+
+
+// Route pour mettre à jour les expériences d'un CV
+router.put('/update-experiences-info/:resumeId', async (req, res) => {
+  const { resumeId } = req.params;
+  const { experiences } = req.body;
+
+  try {
+    
+      const resume = await Resume.findById(resumeId);
+      if (!resume) {
+          return res.status(404).json({ success: false, error: 'CV introuvable.' });
+      }
+
+      // Mise à jour des expériences existantes avec `$set`
+      const updatedResume = await Resume.findByIdAndUpdate(
+          resumeId,
+          { $set: { experiences: experiences } }, // Remplace le champ `experiences` tout en conservant les autres champs
+          { new: true, runValidators: true } // Retourne le document mis à jour et applique les validations
+      );
+
+      res.status(200).json({
+          success: true,
+          message: "Informations d'experiences mises à jour avec succès.",
+          data: updatedResume
+      });
+
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, error: "Une erreur est survenue lors de la mise à jour des informations d'experiences." });
+  }
+});
+
 
 
 

@@ -1,21 +1,31 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { ResumeInfoContext } from '../../context/ResumeInfoContext';
-import { Box, TextField, Button, Typography, CircularProgress } from "@mui/material";
+import { 
+    Box, 
+    TextField, 
+    Button, 
+    Typography, 
+    CircularProgress,
+} from "@mui/material";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import FormHead from '../ui/formsHead/FormHead';
 import Grid from "@mui/material/Grid2";
-import { GenerateText, UpdateSummaryInfo } from '../../api/resumes';
+import { GenerateText, GenerateThreeText, UpdateSummaryInfo } from '../../api/resumes';
 import { useDispatch } from 'react-redux';
 import { SetCurrentResume } from '../../redux/slices/resumeSlice';
-import { Cached } from '@mui/icons-material';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
+import SelectionDialog from '../ui/dialogs/SelectionDialog';
 
 function SummaryForm({ enableNext, resumeId }) {
+    
     const { resumeData, setResumeData } = useContext(ResumeInfoContext);
     const [isLoading, setIsLoading] = useState(false);
     const [highlight, setHighlight] = useState(false);
     const dispatch = useDispatch();
+
+    const [openDialog, setOpenDialog] = useState(false);
+    const [generatedSummaries, setGeneratedSummaries] = useState([]);
 
     const [initialValues, setInitialValues] = useState({
         summary: "",
@@ -31,7 +41,7 @@ function SummaryForm({ enableNext, resumeId }) {
                 summary: resumeData?.summary || "",
             });
         }
-    }, [resumeData]);
+    }, [resumeData]); 
 
     const handleChange = (e, setFieldValue) => {
         enableNext(false);
@@ -88,6 +98,28 @@ function SummaryForm({ enableNext, resumeId }) {
         }
     };
 
+     // Fonction appelée quand un résumé est sélectionné
+        const handleSelectSummary = (summary, setFieldValue) => {
+            setFieldValue("summary", summary);
+            setResumeData((prev) => ({ ...prev, summary }));
+            setOpenDialog(false);
+        };
+
+      const handleGenerateThreeSubmit = async () => {
+        
+          setIsLoading(true)
+          const prompt = `Génère des résumés de profil professionnel de 300 caractères, clair et concis pour un CV, dont le titre est ${resumeData?.title || resumeData?.personalInfo?.jobTitle}.`;
+
+          const response = await GenerateThreeText(prompt)
+          
+           if (response.data.summaries) {
+            setGeneratedSummaries(response.data.summaries);
+            setOpenDialog(true);
+          }
+           setIsLoading(false)
+          
+        };
+
     return (
         <Box>
             <FormHead
@@ -122,7 +154,8 @@ function SummaryForm({ enableNext, resumeId }) {
                                         disabled={isLoading}
                                         startIcon={<AutoFixHighIcon />}
                                         sx={{ textTransform: 'none' }}
-                                        onClick={() => handleGenerateSummary(setFieldValue)}
+                                        //onClick={() => handleGenerateSummary(setFieldValue)}
+                                        onClick={handleGenerateThreeSubmit}
                                     >
                                         {isLoading ? <CircularProgress size={20} sx={{ color: 'white' }} /> : "Générer IA"}
                                     </Button>
@@ -146,6 +179,13 @@ function SummaryForm({ enableNext, resumeId }) {
                                             }}
                                         />
                                     </Grid>
+                                    {/* Utilisation du composant SummarySelectionDialog */}
+                                    <SelectionDialog
+                                        open={openDialog}
+                                        textes={generatedSummaries}
+                                        onClose={() => setOpenDialog(false)}
+                                        onSelect={(summary) => handleSelectSummary(summary, setFieldValue)}
+                                    />
                                 </Grid>
 
                                 <Box mt={2} display="flex" gap={1} justifyContent="flex-end">

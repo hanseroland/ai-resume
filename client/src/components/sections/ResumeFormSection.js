@@ -3,6 +3,8 @@ import React, { useState } from 'react'
 import PersonalDetailForm from '../forms/PersonalDetailForm'
 import {  Apps, ArrowLeft, ArrowRight } from '@mui/icons-material'
 import SummaryForm from '../forms/SummaryForm'
+import ExperienceForm from '../forms/ExperienceForm'
+import EducationForm from '../forms/EducationForm'
 
 function ResumeFormSection({resumeId}) {
 
@@ -76,16 +78,22 @@ function ResumeFormSection({resumeId}) {
              </Box>
               
            </Box>
+           
         {/**Infos personnelles */}
-       {activeFormIndex == 1 ? <PersonalDetailForm resumeId={resumeId} enableNext={(v)=>setEnableNext(v)} /> : null }
+        {activeFormIndex == 1 ? <PersonalDetailForm resumeId={resumeId} enableNext={(v)=>setEnableNext(v)} /> : null }
+
         {/**Résumé */}
         {activeFormIndex == 2 ? <SummaryForm resumeId={resumeId} enableNext={(v)=>setEnableNext(v)} /> : null }
 
         {/**Compétences */}
 
-        {/**Experiences */}
 
+        {/**Experiences */}
+        {activeFormIndex == 5 ? <ExperienceForm resumeId={resumeId} enableNext={(v)=>setEnableNext(v)} /> : null }
+          
         {/**Education */}
+        {activeFormIndex == 6 ? <EducationForm resumeId={resumeId} enableNext={(v)=>setEnableNext(v)} /> : null }
+
 
 
 
