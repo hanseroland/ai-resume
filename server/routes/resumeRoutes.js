@@ -345,9 +345,10 @@ router.put('/update-educations-info/:resumeId', async (req, res) => {
       // Mise à jour des éducations existantes avec `$set`
       const updatedResume = await Resume.findByIdAndUpdate(
           resumeId,
-          { $set: { education: educations } }, // Remplace le champ `education` tout en conservant les autres champs
+          { $set: { educations: educations } }, // Remplace le champ `education` tout en conservant les autres champs
           { new: true, runValidators: true } // Retourne le document mis à jour et applique les validations
       );
+      console.log(updatedResume)
 
       res.status(200).json({
           success: true,

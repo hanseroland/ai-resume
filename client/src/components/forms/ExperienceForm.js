@@ -15,25 +15,8 @@ const ExperienceForm = ({ enableNext, resumeId }) => {
     const { resumeData, setResumeData } = useContext(ResumeInfoContext);
     const dispatch = useDispatch();
 
-    console.log("resumeData Exerience",resumeData)
     const [isLoading, setIsLoading] = useState(false);
     
-
-    // Valeurs initiales avec les expériences déjà présentes dans le contexte
-   /* const initialValues = {
-        experiences: Array.isArray(resumeData?.experiences) && resumeData.experiences.length > 0
-        ? resumeData.experiences : [
-            {
-                jobTitle: "",
-                companyName: "",
-                city: "",
-                country: "",
-                startDate: "",
-                endDate: "",
-                workSummary: ""
-            }
-        ]
-    };*/
 
     const [initialValues, setInitialValues] = useState({
         experiences: [
@@ -49,11 +32,21 @@ const ExperienceForm = ({ enableNext, resumeId }) => {
         ]
     });
 
+   
     useEffect(() => {
         if (Array.isArray(resumeData?.experiences) && resumeData.experiences.length > 0) {
-            setInitialValues({ experiences: resumeData.experiences });
+            //console.log("test exp dans useEffec :",resumeData.experiences)
+            setInitialValues({ experiences: resumeData?.experiences });
         }
     }, [resumeData?.experiences]);
+
+    //console.log("initial value :",initialValues)
+
+
+      // Vérifie si `resumeData.experiences` est disponible, sinon affiche un chargement
+      if (!resumeData || !resumeData.experiences) {
+        return <CircularProgress sx={{ display: 'block', mx: 'auto', my: 4 }} />;
+      }
 
     // Schéma de validation avec Yup
     const validationSchema = Yup.object().shape({
@@ -100,7 +93,9 @@ const ExperienceForm = ({ enableNext, resumeId }) => {
 
 
        const handleSubmit = async (values, { setSubmitting }) => {
+            console.log("values exp submit :",values)
             setIsLoading(true);
+
             const response = await UpdateExperiences(resumeId, values);
     
             if (response.success) {
@@ -135,6 +130,7 @@ const ExperienceForm = ({ enableNext, resumeId }) => {
                         <FieldArray name="experiences">
                             {({ push, remove }) => {
                                 const experiences = values.experiences;
+                               // console.log("values exp:",values)
                                 //const lastExperience = experiences[experiences.length - 1];
                                 const canAddNewExperience = 
                                 !errors.experiences ||
@@ -156,43 +152,59 @@ const ExperienceForm = ({ enableNext, resumeId }) => {
                                                 
                                                 <Grid container spacing={2}>
                                                     <Grid size={{ xs: 12, sm: 6 }}>
+                                                    <span>Titre du poste</span>
                                                         <Field
                                                             as={TextField}
-                                                            name="jobTitle"
-                                                            label="Titre du poste"
+                                                           // name="jobTitle"
+                                                            name={`experiences.${index}.jobTitle`}
+                                                            //label="Titre du poste"
                                                             fullWidth
                                                             variant="outlined"
                                                             onChange={(e) => handleChangeExperience(e, index, setFieldValue)}
+                                                            error={touched.jobTitle && Boolean(errors.jobTitle)}
+                                                            helperText={touched.jobTitle && errors.jobTitle}
                                                         />
                                                     </Grid>
                                                     <Grid size={{ xs: 12, sm: 6 }}>
+                                                    <span>Nom de l'entreprise</span>
                                                         <Field
                                                             as={TextField}
-                                                            name="companyName"
-                                                            label="Nom de l'entreprise"
+                                                            name={`experiences.${index}.companyName`} 
+                                                           // label="Nom de l'entreprise"
                                                             fullWidth
                                                             variant="outlined"
                                                             onChange={(e) => handleChangeExperience(e, index, setFieldValue)}
+                                                            error={touched.companyName && Boolean(errors.companyName)}
+                                                            helperText={touched.companyName && errors.companyName}
+                                                            
                                                         />
                                                     </Grid>
                                                     <Grid size={{ xs: 12, sm: 6 }}>
+                                                    <span>Ville</span>
                                                         <Field
                                                             as={TextField}
-                                                            name="city"
-                                                            label="Ville"
+                                                            name={`experiences.${index}.city`}
+                                                            //label="Ville"
                                                             fullWidth
                                                             variant="outlined"
                                                             onChange={(e) => handleChangeExperience(e, index, setFieldValue)}
+                                                            error={touched.city && Boolean(errors.city)}
+                                                            helperText={touched.city && errors.city}
+                                                            
                                                         />
                                                     </Grid>
                                                     <Grid size={{ xs: 12, sm: 6 }}>
+                                                    <span>Pays</span>
                                                         <Field
                                                             as={TextField}
-                                                            name="country"
-                                                            label="Pays"
+                                                            name={`experiences.${index}.country`}
+                                                            //label="Pays"
                                                             fullWidth
                                                             variant="outlined"
                                                             onChange={(e) => handleChangeExperience(e, index, setFieldValue)}
+                                                            error={touched.country && Boolean(errors.country)}
+                                                            helperText={touched.country && errors.country}
+                                                            
                                                         />
                                                     </Grid>
 
@@ -202,7 +214,7 @@ const ExperienceForm = ({ enableNext, resumeId }) => {
                                                             as={TextField}
                                                             fullWidth
                                                             id="startDate"
-                                                            name="startDate"
+                                                            name={`experiences.${index}.startDate`}
                                                             type="date"
                                                             variant="outlined"
                                                             onChange={(e) => handleChangeExperience(e, index, setFieldValue)}
@@ -214,22 +226,25 @@ const ExperienceForm = ({ enableNext, resumeId }) => {
                                                             as={TextField}
                                                             fullWidth
                                                             id="endDate"
-                                                            name="endDate"
+                                                            name={`experiences.${index}.endDate`}
                                                             type="date"
                                                             variant="outlined"
                                                             onChange={(e) => handleChangeExperience(e, index, setFieldValue)}
                                                         />
                                                     </Grid>
                                                     <Grid size={{ xs: 12, sm: 12 }}>
+                                                        <span>Description de l'expérience</span>
                                                         <Field
                                                             as={TextField}
                                                             fullWidth
                                                             id="workSummary"
-                                                            name="workSummary"
-                                                            label="Descriptiion de l'expérience"
+                                                            name={`experiences.${index}.workSummary`} 
+                                                            //label="Descriptiion de l'expérience"
                                                             variant="outlined"
                                                             multiline
                                                             onChange={(e) => handleChangeExperience(e, index, setFieldValue)}
+                                                            error={touched.workSummary && Boolean(errors.workSummary)}
+                                                            helperText={touched.workSummary && errors.workSummary}
                                                         />
                                                     </Grid>
 

@@ -78,6 +78,7 @@ const EducationForm = ({ enableNext, resumeId }) => {
 
      const handleSubmit = async (values, { setSubmitting }) => {
             setIsLoading(true);
+            console.log("values edu",values)
             const response = await UpdateEducations(resumeId, values);
     
             if (response.success) {
@@ -132,40 +133,44 @@ const EducationForm = ({ enableNext, resumeId }) => {
                                                 </Typography>
                                                 <Grid container spacing={2}>
                                                     <Grid size={{ xs: 12, sm: 6 }}>
+                                                     <span>Diplôme obtenu</span>
                                                         <Field
                                                             as={TextField}
-                                                            name="degree"
-                                                            label="Diplôme obtenu"
+                                                            name={`experiences.${index}.degree`}
+                                                            //label="Diplôme obtenu"
                                                             fullWidth
                                                             variant="outlined"
                                                             onChange={(e) => handleChangeEducation(e, index, setFieldValue)}
                                                         />
                                                     </Grid>
                                                     <Grid size={{ xs: 12, sm: 6 }}>
+                                                    <span>Etablissement fréquenté</span>
                                                         <Field
-                                                            as={TextField}
-                                                            name="schoolName"
-                                                            label="Etablissement fréquenté"
+                                                            as={TextField}                                                           
+                                                            name={`experiences.${index}.schoolName`}
+                                                            //label="Etablissement fréquenté"
                                                             fullWidth
                                                             variant="outlined"
                                                             onChange={(e) => handleChangeEducation(e, index, setFieldValue)}
                                                         />
                                                     </Grid>
                                                     <Grid size={{ xs: 12, sm: 6 }}>
+                                                    <span>Ville</span>
                                                         <Field
                                                             as={TextField}
-                                                            name="city"
-                                                            label="Ville"
+                                                            name={`experiences.${index}.city`}
+                                                           // label="Ville"
                                                             fullWidth
                                                             variant="outlined"
                                                             onChange={(e) => handleChangeEducation(e, index, setFieldValue)}
                                                         />
                                                     </Grid>
                                                     <Grid size={{ xs: 12, sm: 6 }}>
+                                                    <span>Pays</span>
                                                         <Field
                                                             as={TextField}
-                                                            name="country"
-                                                            label="Pays"
+                                                            name={`experiences.${index}.country`}
+                                                            //label="Pays"
                                                             fullWidth
                                                             variant="outlined"
                                                             onChange={(e) => handleChangeEducation(e, index, setFieldValue)}
@@ -178,7 +183,7 @@ const EducationForm = ({ enableNext, resumeId }) => {
                                                             as={TextField}
                                                             fullWidth
                                                             id="startDate"
-                                                            name="startDate"
+                                                            name={`experiences.${index}.startDate`}
                                                             type="date"
                                                             variant="outlined"
                                                             onChange={(e) => handleChangeEducation(e, index, setFieldValue)}
@@ -190,7 +195,7 @@ const EducationForm = ({ enableNext, resumeId }) => {
                                                             as={TextField}
                                                             fullWidth
                                                             id="endDate"
-                                                            name="endDate"
+                                                            name={`experiences.${index}.endDate`}
                                                             type="date"
                                                             variant="outlined"
                                                             onChange={(e) => handleChangeEducation(e, index, setFieldValue)}
