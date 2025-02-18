@@ -5,6 +5,7 @@ import { Add, Delete } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { ResumeInfoContext } from "../../context/ResumeInfoContext";
 import Grid from "@mui/material/Grid2";
+import RichTextEditor from "../RichTextEditor";
 
 
 const formField = {
@@ -74,11 +75,11 @@ const initialValues = {
   };
 
      // Fonction pour gérer la mise à jour en temps réel du contexte et du formulaire
-     const handleChangeExperience = (e, index, setFieldValue) => {
+     const handleChangeExperience = (index, e) => {
         const { name, value } = e.target;
         const fieldName = `experiences.${index}.${name}`;
     
-        setFieldValue(fieldName, value); 
+       // setFieldValue(fieldName, value); 
     
         setResumeData((prev) => {
             const updatedExperiences = [...prev.experiences];
@@ -94,11 +95,9 @@ const initialValues = {
   return (
     <Box p={3} bgcolor="white" boxShadow={3} borderRadius={2} maxWidth={600} mx="auto">
       <Typography variant="h6" fontWeight="bold" mb={2}>Gérer les expériences</Typography>
-      <Formik initialValues={initialValues} enableReinitialize onSubmit={handleSubmit}>
-        {({ values, setFieldValue }) => (
-          <Form>
-            <FieldArray name="experiences">
-              {({ push, remove }) => (
+     
+     
+        
                 <>
                   {experienceList.map((item, index) => (
                     <Grid container spacing={2}>
@@ -108,9 +107,8 @@ const initialValues = {
                            <TextField 
                                 fullWidth 
                                 //label="Titre du poste" 
-                                name={`experiences.${index}.jobTitle`} 
-                                value={values.experiences[index].jobTitle} 
-                                onChange={(e) => handleChangeExperience(e, index, setFieldValue)} 
+                               
+                                onChange={(e) => handleChangeExperience(index, e)} 
                                 margin="dense" 
                            />
 
@@ -120,9 +118,8 @@ const initialValues = {
                            <TextField 
                                 fullWidth 
                                 //label="Titre du poste" 
-                                name={`experiences.${index}.companyName`} 
-                                value={values.experiences[index].companyName} 
-                                onChange={(e) => handleChangeExperience(e, index, setFieldValue)} 
+                              
+                                onChange={(e) => handleChangeExperience(index, e)} 
                                 margin="dense" 
                            />
 
@@ -132,9 +129,8 @@ const initialValues = {
                            <TextField 
                                 fullWidth 
                                 //label="Titre du poste" 
-                                name={`experiences.${index}.startDate`} 
-                                value={values.experiences[index].startDate} 
-                                onChange={(e) => handleChangeExperience(e, index, setFieldValue)} 
+                               
+                                onChange={(e) => handleChangeExperience(index, e)} 
                                 margin="dense" 
                                 type="date"
                            />
@@ -145,9 +141,8 @@ const initialValues = {
                            <TextField 
                                 fullWidth 
                                 //label="Titre du poste" 
-                                name={`experiences.${index}.enDate`} 
-                                value={values.experiences[index].enDate} 
-                                onChange={(e) => handleChangeExperience(e, index, setFieldValue)} 
+                                
+                                onChange={(e) => handleChangeExperience(index, e)} 
                                 margin="dense" 
                                 type="date"
                            />
@@ -155,49 +150,41 @@ const initialValues = {
                          </Grid>
                          <Grid size={{ xs: 12, sm: 12 }}>
                            <span>Description</span> 
-                           <TextField 
-                                fullWidth 
-                                //label="Titre du poste" 
-                                name={`experiences.${index}.workSummary`} 
-                                value={values.experiences[index].workSummary} 
-                                onChange={(e) => handleChangeExperience(e, index, setFieldValue)} 
-                                margin="dense" 
-                                
-                           />
+                           <RichTextEditor/>
 
                          </Grid>
                          <Box  textAlign="right" >
-                              <IconButton onClick={() => remove(index)} color="error"><Delete /></IconButton>
+                              <IconButton  color="error"><Delete /></IconButton>
                          </Box>
                             
                       
                     </Grid>
                    
                   ))}
-                  <Button 
+
+               
+                </>
+            
+            <Box mt={3}  display="flex" justifyContent="space-between" >
+                <Button 
                   startIcon={<Add />} 
-                  onClick={() => push({ jobTitle: "", companyName: "", startDate: "", enDate: "", description: "" })} 
+                 // onClick={() => push({ jobTitle: "", companyName: "", startDate: "", enDate: "", description: "" })} 
                   variant="outlined" 
                   color="primary"
                   sx={{textTransform:'none'}}
                   >
                     Ajouter une expérience
                   </Button>
-                </>
-              )}
-            </FieldArray>
-            <Box mt={3}>
-              <Button 
-                type="submit" 
-                variant="contained" 
-                color="primary" 
-                disabled={loading}>
-                    {loading ? "Enregistrement..." : "Sauvegarder"}
-              </Button>
+                  <Button 
+                    type="submit" 
+                    variant="contained" 
+                    color="primary" 
+                    disabled={loading}>
+                        {loading ? "Enregistrement..." : "Sauvegarder"}
+                  </Button>
             </Box>
-          </Form>
-        )}
-      </Formik>
+         
+    
     </Box>
   );
 }
