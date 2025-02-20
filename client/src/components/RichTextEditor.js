@@ -8,7 +8,6 @@ import {
   BtnNumberedList,
   BtnRedo,
   BtnStrikeThrough,
-  BtnStyles,
   BtnUnderline,
   BtnUndo,
   HtmlButton,
@@ -17,7 +16,7 @@ import {
   EditorProvider, 
 } from 'react-simple-wysiwyg';
 
-function RichTextEditor({}) {
+function RichTextEditor({onRichTextEditorChange}) {
 
   const [value, setValue] = useState('simple text');
 
@@ -29,6 +28,7 @@ function RichTextEditor({}) {
     <EditorProvider>
     <Editor value={value} onChange={(e)=>{
       setValue(e.target.value)
+      onRichTextEditorChange(e)
     }}>
       <Toolbar>
       <BtnUndo />
@@ -44,9 +44,9 @@ function RichTextEditor({}) {
            
           <BtnLink />
           <BtnClearFormatting />
-          <HtmlButton />
+
            
-          <BtnStyles />
+        
       </Toolbar>
     </Editor>
   </EditorProvider>

@@ -32,82 +32,71 @@ export default function ExperienceForm() {
     ]);
 
 
-  console.log(resumeData)
 
-  const formatDate = (date) => {
-    if (!date) return "";
-    return new Date(date).toISOString().split("T")[0]; // Convertit en "YYYY-MM-DD"
-};
-
-const initialValues = {
-    experiences: resumeData?.experiences?.length > 0
-        ? resumeData.experiences.map(exp => ({
-            ...exp,
-            startDate: formatDate(exp.startDate),
-            endDate: formatDate(exp.endDate),
-        }))
-        : [
-            {
-                jobTitle: "",
-                companyName: "",
-                city: "",
-                country: "",
-                startDate: "",
-                endDate: "",
-                workSummary: ""
-            }
-        ]
-};
+      const formatDate = (date) => {
+          if (!date) return "";
+          return new Date(date).toISOString().split("T")[0]; // Convertit en "YYYY-MM-DD"
+      };
 
 
 
-  
-
-  const handleSubmit = async (values) => {
-    setLoading(true);
-    try {
-      
-      alert("Expériences mises à jour avec succès");
-    } catch (error) {
-      alert("Erreur lors de la mise à jour");
-    }
-    setLoading(false);
-  };
+      const handleSubmit = async (values) => {
+        setLoading(true);
+        try {
+          
+          alert("Expériences mises à jour avec succès");
+        } catch (error) {
+          alert("Erreur lors de la mise à jour");
+        }
+        setLoading(false);
+      };
 
      // Fonction pour gérer la mise à jour en temps réel du contexte et du formulaire
      const handleChangeExperience = (index, e) => {
-        const { name, value } = e.target;
-        const fieldName = `experiences.${index}.${name}`;
-    
-       // setFieldValue(fieldName, value); 
-    
-        setResumeData((prev) => {
-            const updatedExperiences = [...prev.experiences];
-            updatedExperiences[index] = {
-                ...updatedExperiences[index],
-                [name]: value
-            };
-            return { ...prev, experiences: updatedExperiences };
-        });
+            const newEntries = experienceList.slice();
+            const {name,value} = e.target;
+            newEntries[index][name]=value;
+            setExperienceList(newEntries)
     };
+
+    const addNewExperience = () => {
+      setExperienceList([...experienceList,formField])
+    }
+
+    const RemoveExperience = () => {
+      setExperienceList(experienceList=>experienceList.slice(0,-1))
+    }
+
+    const handleRichTextEditorChange = (e,name,index) => {
+          const newEntries = experienceList.slice();
+          newEntries[index][name]=e.target.value;
+          setExperienceList(newEntries)
+
+    }
+    
+    useEffect(() => {
+      setResumeData({
+        ...resumeData,
+        experiences:experienceList
+      })
+      console.log("exp",resumeData )
+    }, [experienceList])
     
 
   return (
     <Box p={3} bgcolor="white" boxShadow={3} borderRadius={2} maxWidth={600} mx="auto">
       <Typography variant="h6" fontWeight="bold" mb={2}>Gérer les expériences</Typography>
      
-     
-        
                 <>
                   {experienceList.map((item, index) => (
-                    <Grid container spacing={2}>
+                    <Grid container key={index} spacing={2}>
                        
                          <Grid size={{ xs: 12, sm: 6 }}>
                            <span>Titre du poste</span> 
                            <TextField 
                                 fullWidth 
                                 //label="Titre du poste" 
-                               
+                                name="jobTitle"
                                 onChange={(e) => handleChangeExperience(index, e)} 
                                 margin="dense" 
                            />
@@ -118,7 +107,29 @@ const initialValues = {
                            <TextField 
                                 fullWidth 
                                 //label="Titre du poste" 
-                              
+                                name="companyName"
+                                onChange={(e) => handleChangeExperience(index, e)} 
+                                margin="dense" 
+                           />
+
+                         </Grid>
+                         <Grid size={{ xs: 12, sm: 6 }}>
+                           <span>Ville</span> 
+                           <TextField 
+                                fullWidth 
+                                //label="Titre du poste" 
+                                name="city"
+                                onChange={(e) => handleChangeExperience(index, e)} 
+                                margin="dense" 
+                           />
+
+                         </Grid>
+                         <Grid size={{ xs: 12, sm: 6 }}>
+                           <span>Pays</span> 
+                           <TextField 
+                                fullWidth 
+                                //label="Titre du poste" 
+                                name="country"
                                 onChange={(e) => handleChangeExperience(index, e)} 
                                 margin="dense" 
                            />
@@ -129,7 +140,7 @@ const initialValues = {
                            <TextField 
                                 fullWidth 
                                 //label="Titre du poste" 
-                               
+                                name="startDate"
                                 onChange={(e) => handleChangeExperience(index, e)} 
                                 margin="dense" 
                                 type="date"
@@ -141,7 +152,7 @@ const initialValues = {
                            <TextField 
                                 fullWidth 
                                 //label="Titre du poste" 
-                                
+                                name="enDate"
                                 onChange={(e) => handleChangeExperience(index, e)} 
                                 margin="dense" 
                                 type="date"
@@ -150,11 +161,18 @@ const initialValues = {
                          </Grid>
                          <Grid size={{ xs: 12, sm: 12 }}>
                            <span>Description</span> 
-                           <RichTextEditor/>
+                           <RichTextEditor
+                            onRichTextEditorChange={(e)=>handleRichTextEditorChange(e,'workSummary',index)}
+                           />
 
                          </Grid>
                          <Box  textAlign="right" >
-                              <IconButton  color="error"><Delete /></IconButton>
+                              <IconButton  
+                                color="error"
+                                onClick={RemoveExperience}
+                              >
+                                  <Delete />
+                              </IconButton>
                          </Box>
                             
                       
@@ -168,7 +186,7 @@ const initialValues = {
             <Box mt={3}  display="flex" justifyContent="space-between" >
                 <Button 
                   startIcon={<Add />} 
-                 // onClick={() => push({ jobTitle: "", companyName: "", startDate: "", enDate: "", description: "" })} 
+                 onClick={addNewExperience} 
                   variant="outlined" 
                   color="primary"
                   sx={{textTransform:'none'}}
