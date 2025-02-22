@@ -1,11 +1,12 @@
 import { useState, useEffect, useContext } from "react";
-import { Formik, Form, Field, FieldArray } from "formik";
-import { Button, TextField, Box, Typography, IconButton } from "@mui/material";
+import { Button, TextField, Box, Typography, IconButton, CircularProgress } from "@mui/material";
 import { Add, Delete } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { ResumeInfoContext } from "../../context/ResumeInfoContext";
 import Grid from "@mui/material/Grid2";
 import RichTextEditor from "../RichTextEditor";
+import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
+
 
 
 const formField = {
@@ -26,6 +27,9 @@ export default function ExperienceForm() {
     const [isLoading, setIsLoading] = useState(false);
 
     const [loading, setLoading] = useState(false);
+
+    const [generatedDescription, setGeneratedDescription] = useState([]);
+    
 
     const [experienceList, setExperienceList] = useState([
       formField
@@ -73,6 +77,22 @@ export default function ExperienceForm() {
           setExperienceList(newEntries)
 
     }
+
+
+    const handleGenerateThreeSubmit = async (index) => {
+            
+              setIsLoading(true)
+              /*const prompt = `Génère des résumés de profil professionnel de 300 caractères, clair et concis pour un CV, dont le titre est ${resumeData?.title || resumeData?.personalInfo?.jobTitle}.`;
+    
+              const response = await GenerateThreeText(prompt)
+              
+               if (response.data.summaries) {
+                setGeneratedSummaries(response.data.summaries);
+                setOpenDialog(true);
+              }
+               setIsLoading(false)*/
+              
+            };
     
     useEffect(() => {
       setResumeData({
@@ -160,7 +180,21 @@ export default function ExperienceForm() {
 
                          </Grid>
                          <Grid size={{ xs: 12, sm: 12 }}>
+                          
+                           <Box mt={1} display="flex" justifyContent="space-between">
                            <span>Description</span> 
+                                    <Button
+                                        variant="contained"
+                                        color="secondary"
+                                        disabled={isLoading}
+                                        startIcon={<AutoFixHighIcon />}
+                                        sx={{ textTransform: 'none' }}
+                                        //onClick={() => handleGenerateSummary(setFieldValue)}
+                                        onClick={handleGenerateThreeSubmit}
+                                    >
+                                        {isLoading ? <CircularProgress size={20} sx={{ color: 'white' }} /> : "Générer IA"}
+                                    </Button>
+                                </Box>
                            <RichTextEditor
                             onRichTextEditorChange={(e)=>handleRichTextEditorChange(e,'workSummary',index)}
                            />

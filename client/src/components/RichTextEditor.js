@@ -18,7 +18,7 @@ import {
 
 function RichTextEditor({onRichTextEditorChange}) {
 
-  const [value, setValue] = useState('simple text');
+  const [value, setValue] = useState('');
 
   function onChange(e) {
     setValue(e.target.value);
@@ -33,20 +33,14 @@ function RichTextEditor({onRichTextEditorChange}) {
       <Toolbar>
       <BtnUndo />
           <BtnRedo />
-           
           <BtnBold />
           <BtnItalic />
           <BtnUnderline />
           <BtnStrikeThrough />
-           
           <BtnNumberedList />
           <BtnBulletList />
-           
           <BtnLink />
           <BtnClearFormatting />
-
-           
-        
       </Toolbar>
     </Editor>
   </EditorProvider>

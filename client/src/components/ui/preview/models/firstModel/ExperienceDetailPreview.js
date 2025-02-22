@@ -69,10 +69,12 @@ const ExperienceDetailPreview = memo(({ resumeData }) => {
                         : "Aujourd'hui"
                     }`}
                   </Typography>
-                  <Typography variant="body2" sx={{ mt: 1, textAlign: "justify" }}>
+                 {/* <Typography variant="body2" sx={{ mt: 1, textAlign: "justify" }}>
                     {experience?.workSummary ||
                       "Aucune description fournie pour cette expérience."}
-                  </Typography>
+                  </Typography>*/}
+                  <div dangerouslySetInnerHTML={{__html:experience?.workSummary }} />
+
                 </Stack>
               </Grid>
             </Grid>
