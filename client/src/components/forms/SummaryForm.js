@@ -16,6 +16,7 @@ import { useDispatch } from 'react-redux';
 import { SetCurrentResume } from '../../redux/slices/resumeSlice';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import SelectionDialog from '../ui/dialogs/SelectionDialog';
+import ResumeList from '../ui/list/ResumeList';
 
 function SummaryForm({ enableNext, resumeId }) {
     
@@ -182,10 +183,15 @@ function SummaryForm({ enableNext, resumeId }) {
                                     {/* Utilisation du composant SummarySelectionDialog */}
                                     <SelectionDialog
                                         open={openDialog}
-                                        textes={generatedSummaries}
+                                        //textes={generatedSummaries}
                                         onClose={() => setOpenDialog(false)}
-                                        onSelect={(summary) => handleSelectSummary(summary, setFieldValue)}
-                                    />
+                                       // onSelect={(summary) => handleSelectSummary(summary, setFieldValue)}
+                                    >
+                                         <ResumeList 
+                                            textes={generatedSummaries} 
+                                            onSelect={(summary) => handleSelectSummary(summary, setFieldValue)} 
+                                        />
+                                    </SelectionDialog>
                                 </Grid>
 
                                 <Box mt={2} display="flex" gap={1} justifyContent="flex-end">

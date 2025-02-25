@@ -330,6 +330,57 @@ router.post('/generate-three-textes', async (req, res) => {
   }
 });
 
+
+// Route pour générer une Expérience 
+router.post('/generate-experience-list', async (req, res) => {
+  try {
+
+    const { prompt } = req.body;
+    if (!prompt) {
+      return res.status(400).json({ success: false, message: "Le prompt est requis." });
+    }
+
+    // Préparation des messages pour ChatCompletion
+    const messages = [
+      {
+        role: "system",
+        content: "Vous êtes un expert en rédaction de CV. Générez un texte clair, concis et professionnel à partir des informations fournies."
+      },
+      {
+        role: "user",
+        content: prompt
+      }
+    ];
+
+    // Appel à l'API ChatCompletion
+    const chatCompletion = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo", // Ou "gpt-4" si nécessaire
+      messages: messages,
+      max_tokens: 500,       // Ajustez la valeur en fonction de la longueur attendue
+      temperature: 0.7,      // Ajustez la créativité de la réponse
+    });
+
+    // Extraction du contenu généré
+    const generatedText = chatCompletion.choices[0].message.content;
+
+    console.log("expérience : ",generatedText)
+
+    // Réponse avec le texte généré
+    res.status(200).json({
+      success: true,
+      message: "Expérience générée avec succès.",
+      data: generatedText
+    });
+  } catch (error) {
+    console.error("Erreur lors de la génération du texte:", error);
+    res.status(500).json({
+      success: false,
+      message: "Une erreur est survenue lors de la génération du texte.",
+      error: error.message
+    });
+  }
+});
+
 // Route pour mettre à jour l'éducation d'un CV
 router.put('/update-educations-info/:resumeId', async (req, res) => {
   const { resumeId } = req.params;

@@ -48,6 +48,13 @@ export const GenerateThreeText = async (prompt) => {
     return response;
 };
 
+
+// Générer une Expérience du CV via l'IA
+export const GenerateExperienceList = async (prompt) => {
+    const response = await axiosInstance("post", `/resumes/generate-experience-list`, { prompt });
+    return response;
+};
+
 //modifier les expériences
 export const UpdateExperiences = async (resumeId, values) => {
     const response = await axiosInstance("put", `/resumes/update-experiences-info/${resumeId}`,values);
