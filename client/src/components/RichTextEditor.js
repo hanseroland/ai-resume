@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
-import { 
+import { Box, Button, CircularProgress } from '@mui/material';
+import React, { useContext, useState } from 'react'
+import {
   BtnBold,
   BtnBulletList,
   BtnClearFormatting,
@@ -10,40 +11,91 @@ import {
   BtnStrikeThrough,
   BtnUnderline,
   BtnUndo,
-  HtmlButton,
   Toolbar,
-  Editor, 
-  EditorProvider, 
+  Editor,
+  EditorProvider,
 } from 'react-simple-wysiwyg';
+import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
+import { ResumeInfoContext } from '../context/ResumeInfoContext';
+import { GenerateExperienceList } from '../api/resumes';
 
-function RichTextEditor({onRichTextEditorChange}) {
+
+function RichTextEditor({ onRichTextEditorChange,index }) {
+
+    const { resumeData, setResumeData } = useContext(ResumeInfoContext);
+  
 
   const [value, setValue] = useState('');
+
+  const [isLoading, setIsLoading] = useState(false);
+
 
   function onChange(e) {
     setValue(e.target.value);
   }
 
+   const handleGenerateExpList = async (index) => {
+  
+      setIsLoading(true)
+
+      if(!resumeData.experiences[index]?.jobTitle){
+        return alert(`SVP ajouter le titre de l'expérience`)
+      }
+      
+  
+      /*const prompt1 = `Génère des résumés de profil professionnel de 300 caractères,`+ 
+      `clair et concis pour un CV, dont le titre est ${resumeData?.title || resumeData?.personalInfo?.jobTitle}.`;*/
+  
+      const prompt = `Titre du CV : ${resumeData?.title}, génère une description sous forme de liste <ul> ayant entre ` +
+        ` 4-5 points pour l'expérience en tant que ${resumeData.experiences[index]?.jobTitle} dans la société ${resumeData.experiences[index]?.companyName}`
+  
+      const response = await GenerateExperienceList(prompt)
+  
+      if (response.data) {
+        setValue(response.data);
+        //setOpenDialog(true);
+        //setSelectedExperienceIndex(index); // Stocke l'index de l'expérience concernée
+  
+      }
+      setIsLoading(false)
+  
+    };
+
   return (
-    <EditorProvider>
-    <Editor value={value} onChange={(e)=>{
-      setValue(e.target.value)
-      onRichTextEditorChange(e)
-    }}>
-      <Toolbar>
-      <BtnUndo />
-          <BtnRedo />
-          <BtnBold />
-          <BtnItalic />
-          <BtnUnderline />
-          <BtnStrikeThrough />
-          <BtnNumberedList />
-          <BtnBulletList />
-          <BtnLink />
-          <BtnClearFormatting />
-      </Toolbar>
-    </Editor>
-  </EditorProvider>
+    <Box>
+      <Box mt={1} mb={1} display="flex" justifyContent="flex-end">
+        <Button
+          variant="contained"
+          color="secondary"
+          disabled={isLoading}
+          startIcon={<AutoFixHighIcon />}
+          sx={{ textTransform: 'none' }}
+          onClick={() => handleGenerateExpList(index)}
+        >
+          {isLoading ? <CircularProgress size={20} sx={{ color: 'white' }} /> : "Générer IA"}
+        </Button>
+      </Box>
+      <EditorProvider>
+        <Editor value={value} onChange={(e) => {
+          setValue(e.target.value)
+          onRichTextEditorChange(e)
+        }}>
+          <Toolbar>
+            <BtnUndo />
+            <BtnRedo />
+            <BtnBold />
+            <BtnItalic />
+            <BtnUnderline />
+            <BtnStrikeThrough />
+            <BtnNumberedList />
+            <BtnBulletList />
+            <BtnLink />
+            <BtnClearFormatting />
+          </Toolbar>
+        </Editor>
+      </EditorProvider>
+    </Box>
+
   )
 }
 

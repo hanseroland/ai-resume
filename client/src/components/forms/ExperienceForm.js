@@ -1,14 +1,12 @@
 import { useState, useEffect, useContext } from "react";
-import { Button, TextField, Box, Typography, IconButton, CircularProgress } from "@mui/material";
+import { Button, TextField, Box, Typography, IconButton } from "@mui/material";
 import { Add, Delete } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { ResumeInfoContext } from "../../context/ResumeInfoContext";
 import Grid from "@mui/material/Grid2";
 import RichTextEditor from "../RichTextEditor";
-import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
-import { GenerateExperienceList } from "../../api/resumes";
-import SelectionDialog from "../ui/dialogs/SelectionDialog";
-import DescriptionList from "../ui/list/DesciptionList";
+import { UpdateExperiences } from "../../api/resumes";
+import { SetCurrentResume } from "../../redux/slices/resumeSlice";
 
 
 
@@ -22,22 +20,13 @@ const formField = {
   workSummary: ""
 }
 
-export default function ExperienceForm() {
+export default function ExperienceForm({enableNext, resumeId}) {
 
   const { resumeData, setResumeData } = useContext(ResumeInfoContext);
 
   const dispatch = useDispatch();
 
-  const [isLoading, setIsLoading] = useState(false);
-
   const [loading, setLoading] = useState(false);
-
-  const [generatedExpList, setGeneratedExpList] = useState('');
-
-  const [openDialog, setOpenDialog] = useState(false);
-
-  const [selectedExperienceIndex, setSelectedExperienceIndex] = useState(null);
-
 
 
   const [experienceList, setExperienceList] = useState([
@@ -49,19 +38,6 @@ export default function ExperienceForm() {
   const formatDate = (date) => {
     if (!date) return "";
     return new Date(date).toISOString().split("T")[0]; // Convertit en "YYYY-MM-DD"
-  };
-
-
-
-  const handleSubmit = async (values) => {
-    setLoading(true);
-    try {
-
-      alert("Expériences mises à jour avec succès");
-    } catch (error) {
-      alert("Erreur lors de la mise à jour");
-    }
-    setLoading(false);
   };
 
   // Fonction pour gérer la mise à jour en temps réel du contexte et du formulaire
@@ -87,48 +63,36 @@ export default function ExperienceForm() {
 
   }
 
-
-  const handleGenerateExpList = async (index) => {
-
-    setIsLoading(true)
-
-    /*const prompt1 = `Génère des résumés de profil professionnel de 300 caractères,`+ 
-    `clair et concis pour un CV, dont le titre est ${resumeData?.title || resumeData?.personalInfo?.jobTitle}.`;*/
-
-    const prompt2 = `Titre du CV : ${resumeData?.title}, génère une description sous forme de liste <ul> ayant entre ` +
-      ` 4-5 points pour l'expérience en tant que ${experienceList[index]?.jobTitle} dans la société ${experienceList[index]?.companyName}`
-
-    const response = await GenerateExperienceList(prompt2)
-
-    if (response.data) {
-      setGeneratedExpList(response.data);
-      setOpenDialog(true);
-      setSelectedExperienceIndex(index); // Stocke l'index de l'expérience concernée
-
-    }
-    setIsLoading(false)
-
-  };
-
-  const handleSelectGeneratedExp = (exp) => {
-    if (selectedExperienceIndex !== null) {
-      const newEntries = [...experienceList];
-      newEntries[selectedExperienceIndex].workSummary = exp; // Insère le texte généré
-      setExperienceList(newEntries);
-      setOpenDialog(false); // Ferme la boîte de dialogue
-    }
-  };
+   const handleSubmit = async () => {
+          loading(true);
+          const response = await UpdateExperiences(resumeId, experienceList);
+  
+          if (response.success) {
+              dispatch(SetCurrentResume(response.data));
+              enableNext(true);
+          }
+          setLoading(false);
+          setTimeout(() => {
+              alert("Détails enregistrés avec succès !");
+          }, 1000);
+      };
 
   
 
   useEffect(() => {
-    setResumeData({
-      ...resumeData,
-      experiences: experienceList
-    })
-    console.log("exp", resumeData)
-  }, [experienceList])
+    if (resumeData?.experiences && resumeData?.experiences.length > 0) {
+      setExperienceList(resumeData?.experiences);
+    }
+  }, []);
 
+  useEffect(() => {
+    setResumeData((prev) => ({
+      ...prev,
+      experiences: experienceList,
+    }));
+  }, [experienceList]);
+
+ 
 
   return (
     <Box p={3} bgcolor="white" boxShadow={3} borderRadius={2} maxWidth={600} mx="auto">
@@ -208,21 +172,8 @@ export default function ExperienceForm() {
             </Grid>
             <Grid size={{ xs: 12, sm: 12 }}>
 
-              <Box mt={1} mb={1} display="flex" justifyContent="space-between">
-                <span>Description</span>
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  disabled={isLoading}
-                  startIcon={<AutoFixHighIcon />}
-                  sx={{ textTransform: 'none' }}
-                  //onClick={() => handleGenerateSummary(setFieldValue)}
-                  onClick={()=>handleGenerateExpList(index)}
-                >
-                  {isLoading ? <CircularProgress size={20} sx={{ color: 'white' }} /> : "Générer IA"}
-                </Button>
-              </Box>
               <RichTextEditor
+                index={index}
                 onRichTextEditorChange={(e) => handleRichTextEditorChange(e, 'workSummary', index)}
               />
 
@@ -262,26 +213,6 @@ export default function ExperienceForm() {
           {loading ? "Enregistrement..." : "Sauvegarder"}
         </Button>
       </Box>
-     
-      <SelectionDialog
-        open={openDialog}
-        onClose={() => setOpenDialog(false)}
-      >
-        <DescriptionList
-          textes={generatedExpList}
-          onSelect={(exp) => {
-            if (selectedExperienceIndex !== null) {
-              handleRichTextEditorChange(
-                { target: { value: exp } }, 
-                "workSummary", 
-                selectedExperienceIndex
-              );
-              setOpenDialog(false); // Fermer la boîte de dialogue après sélection
-            }
-          }}
-        
-        />
-      </SelectionDialog>
 
     </Box>
   );
