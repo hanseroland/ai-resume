@@ -384,7 +384,7 @@ router.post('/generate-experience-list', async (req, res) => {
 // Route pour mettre à jour l'éducation d'un CV
 router.put('/update-educations-info/:resumeId', async (req, res) => {
   const { resumeId } = req.params;
-  const { educations } = req.body;
+  const educations  = req.body;
 
   try {
       // Vérifier si le CV existe
@@ -417,7 +417,10 @@ router.put('/update-educations-info/:resumeId', async (req, res) => {
 // Route pour mettre à jour les expériences d'un CV
 router.put('/update-experiences-info/:resumeId', async (req, res) => {
   const { resumeId } = req.params;
-  const { experiences } = req.body;
+  const  experiences  = req.body;
+
+ // console.log("resume id",req.params)
+ // console.log("body",experiences)
 
   try {
     
@@ -433,6 +436,7 @@ router.put('/update-experiences-info/:resumeId', async (req, res) => {
           { new: true, runValidators: true } // Retourne le document mis à jour et applique les validations
       );
 
+      console.log("resume mDB",updatedResume)
       res.status(200).json({
           success: true,
           message: "Informations d'experiences mises à jour avec succès.",

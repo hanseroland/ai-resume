@@ -1,262 +1,191 @@
-import React, { useContext, useState } from 'react';
-import { Formik, Form, Field, FieldArray } from 'formik';
-import { Box, Button, CircularProgress, TextField, Typography } from '@mui/material';
-import * as Yup from 'yup';
+import React, { useContext, useState, useEffect } from 'react';
+import { Button, TextField, Box, Typography, IconButton, CircularProgress } from '@mui/material';
+import { Add, Delete } from '@mui/icons-material';
+import { useDispatch } from 'react-redux';
 import { ResumeInfoContext } from '../../context/ResumeInfoContext';
 import Grid from "@mui/material/Grid2";
-import { Add, Delete } from '@mui/icons-material';
-import FormHead from '../ui/formsHead/FormHead';
 import { UpdateEducations } from '../../api/resumes';
 import { SetCurrentResume } from '../../redux/slices/resumeSlice';
-import { useDispatch } from 'react-redux';
+import FormHead from '../ui/formsHead/FormHead';
 
+const formField = {
+  degree: "",
+  schoolName: "",
+  city: "",
+  country: "",
+  startDate: "",
+  endDate: ""
+}
 
 const EducationForm = ({ enableNext, resumeId }) => {
-    const { resumeData, setResumeData } = useContext(ResumeInfoContext);
-    const dispatch = useDispatch();
+  const { resumeData, setResumeData } = useContext(ResumeInfoContext);
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(true);
+  const [educationList, setEducationList] = useState([formField]);
 
-    const [isLoading, setIsLoading] = useState(false);
-    
+  console.log("resume Id", resumeId)
+  console.log("educations", resumeData?.educations)
 
-    // Valeurs initiales avec les expériences déjà présentes dans le contexte
-    const initialValues = {
-        educations: Array.isArray(resumeData?.educations) && resumeData.educations.length > 0
-        ? resumeData.educations : [
-            {
-                degree: "",
-                schoolName: "",
-                city: "",
-                country: "",
-                startDate: "",
-                endDate: "",
-            }
-        ]
-    };
+  const formatDate = (date) => {
+    if (!date) return "";
+    return new Date(date).toISOString().split("T")[0]; // Convertit en "YYYY-MM-DD"
+  };
 
-    // Schéma de validation avec Yup
-    const validationSchema = Yup.object().shape({
-        educations: Yup.array().of(
-            Yup.object().shape({
-                degree: Yup.string().required("Le titre du dipôme requis"),
-                schoolName: Yup.string().required("Le nom de l'établissement est requis"),
-                city: Yup.string().required("La ville est requise"),
-                country: Yup.string().required("L'état/pays est requis"),
-                startDate: Yup.date().required("La date de début est requise"),
-                endDate: Yup.date().required("La date de fin est requise"),
-              
-            })
-        )
-    });
+  // Fonction pour gérer la mise à jour en temps réel du contexte et du formulaire
+  const handleChangeEducation = (index, e) => {
+    const newEntries = educationList.slice();
+    const { name, value } = e.target;
+    newEntries[index][name] = value;
+    setEducationList(newEntries)
+  };
 
-    // Fonction pour gérer la mise à jour en temps réel du contexte et du formulaire
-    const handleChangeEducation = (e, index, setFieldValue) => {
-        const { name, value } = e.target;
-        const fieldName = `educations.${index}.${name}`;
+  const addNewEducation = () => {
+    setEducationList([...educationList, formField])
+  }
 
-        // Mise à jour Formik
-        setFieldValue(fieldName, value);
+  const removeEducation = () => {
+    setEducationList(educationList => educationList.slice(0, -1))
+  }
 
-        // Mise à jour immédiate du contexte `resumeData`
-        setResumeData((prev) => {
-            const updatedEducations = [...prev.educations];
-            updatedEducations[index] = {
-                ...updatedEducations[index],
-                [name]: value
-            };
+  const handleSubmit = async () => {
+    setLoading(true);
+    const response = await UpdateEducations(resumeId, educationList);
 
-            return { ...prev, educations: updatedEducations };
-        });
-    };
+    if (response.success) { 
+      dispatch(SetCurrentResume(response.data));
+      enableNext(true);
+    }
+    setLoading(false);
+    setTimeout(() => {
+      alert("Détails enregistrés avec succès !");
+    }, 1000);
+  };
 
-    const handleRemoveEducation = (index) => {
-        setResumeData((prev) => {
-            const updatedEducations = [...prev.educations];
-            updatedEducations.splice(index, 1); // Supprime l'expérience à l'index donné
-            return { ...prev, educations: updatedEducations };
-        });
-    };
+  useEffect(() => {
+    if (resumeData?.educations && resumeData?.educations.length > 0) {
+      setEducationList(resumeData.educations);
+    }
+    setLoading(false);
+  }, [resumeData]);
 
-     const handleSubmit = async (values, { setSubmitting }) => {
-            setIsLoading(true);
-            console.log("values edu",values)
-            const response = await UpdateEducations(resumeId, values);
-    
-            if (response.success) {
-                dispatch(SetCurrentResume(response.data));
-                enableNext(true);
-            }
-            setIsLoading(false);
-            setTimeout(() => {
-                alert("Détails enregistrés avec succès !");
-                setSubmitting(false);
-            }, 1000);
-        };
+  useEffect(() => {
+    setResumeData((prev) => ({
+      ...prev,
+      educations: educationList,
+    }));
+  }, [educationList]);
 
+  if (loading) {
     return (
-        <Box sx={{ maxWidth: 800, mx: 'auto', p: 2 }}>
-             <Box mb={2}>
-                <FormHead
-                    title="Educations"
-                    description="Ajouter votre parcours éductif"
-                />
-            </Box>
-            <Formik
-                enableReinitialize
-                initialValues={initialValues}
-                validationSchema={validationSchema}
-                onSubmit={handleSubmit}
-            >
-                {({ values, errors, touched, setFieldValue }) => (
-                    <Form>
-                        <FieldArray name="educations">
-                            {({ push, remove }) => {
-                                const educations = values.educations;
-                                const canAddNewEducation = 
-                                !errors.educations ||
-                                !errors.educations[educations.length - 1];
-
-                                return (
-                                    <div>
-                                        {educations.map((education, index) => (
-                                            <Box
-                                                key={index}
-                                                sx={{
-                                                    border: '1px solid #ccc',
-                                                    borderRadius: 2,
-                                                    p: 2,
-                                                    mb: 2,
-                                                    backgroundColor: '#fafafa'
-                                                }}
-                                            >
-                                                <Typography variant="h6" gutterBottom>
-                                                    Education {index + 1}
-                                                </Typography>
-                                                <Grid container spacing={2}>
-                                                    <Grid size={{ xs: 12, sm: 6 }}>
-                                                     <span>Diplôme obtenu</span>
-                                                        <Field
-                                                            as={TextField}
-                                                            name={`experiences.${index}.degree`}
-                                                            //label="Diplôme obtenu"
-                                                            fullWidth
-                                                            variant="outlined"
-                                                            onChange={(e) => handleChangeEducation(e, index, setFieldValue)}
-                                                        />
-                                                    </Grid>
-                                                    <Grid size={{ xs: 12, sm: 6 }}>
-                                                    <span>Etablissement fréquenté</span>
-                                                        <Field
-                                                            as={TextField}                                                           
-                                                            name={`experiences.${index}.schoolName`}
-                                                            //label="Etablissement fréquenté"
-                                                            fullWidth
-                                                            variant="outlined"
-                                                            onChange={(e) => handleChangeEducation(e, index, setFieldValue)}
-                                                        />
-                                                    </Grid>
-                                                    <Grid size={{ xs: 12, sm: 6 }}>
-                                                    <span>Ville</span>
-                                                        <Field
-                                                            as={TextField}
-                                                            name={`experiences.${index}.city`}
-                                                           // label="Ville"
-                                                            fullWidth
-                                                            variant="outlined"
-                                                            onChange={(e) => handleChangeEducation(e, index, setFieldValue)}
-                                                        />
-                                                    </Grid>
-                                                    <Grid size={{ xs: 12, sm: 6 }}>
-                                                    <span>Pays</span>
-                                                        <Field
-                                                            as={TextField}
-                                                            name={`experiences.${index}.country`}
-                                                            //label="Pays"
-                                                            fullWidth
-                                                            variant="outlined"
-                                                            onChange={(e) => handleChangeEducation(e, index, setFieldValue)}
-                                                        />
-                                                    </Grid>
-
-                                                    <Grid size={{ xs: 12, sm: 6 }}>
-                                                        <span>Date de début</span>
-                                                        <Field
-                                                            as={TextField}
-                                                            fullWidth
-                                                            id="startDate"
-                                                            name={`experiences.${index}.startDate`}
-                                                            type="date"
-                                                            variant="outlined"
-                                                            onChange={(e) => handleChangeEducation(e, index, setFieldValue)}
-                                                        />
-                                                    </Grid>
-                                                    <Grid size={{ xs: 12, sm: 6 }}>
-                                                        <span>Date de fin</span>
-                                                        <Field
-                                                            as={TextField}
-                                                            fullWidth
-                                                            id="endDate"
-                                                            name={`experiences.${index}.endDate`}
-                                                            type="date"
-                                                            variant="outlined"
-                                                            onChange={(e) => handleChangeEducation(e, index, setFieldValue)}
-                                                        />
-                                                    </Grid>
-                                                   
-                                                </Grid>
-                                                {index > 0 && (
-                                                    <Box mt={2} textAlign="right">
-                                                        <Button
-                                                            variant="outlined"
-                                                            color="error"
-                                                            onClick={() => {
-                                                                remove(index);
-                                                                handleRemoveEducation(index);
-                                                            }}
-                                                            startIcon={<Delete />}
-                                                            sx={{
-                                                                textTransform: 'none'
-                                                            }}
-                                                        >
-                                                            Supprimer
-                                                        </Button>
-                                                    </Box>
-                                                )}
-                                            </Box>
-                                        ))}
-                                
-
-                                        <Box mt={2} display="flex" gap={1} justifyContent="space-between">
-                                        <Button
-                                                variant="contained"
-                                                color="primary"
-                                                startIcon={<Add />}
-                                                disabled={!canAddNewEducation}
-                                                onClick={() => push(initialValues.educations[0])}
-                                                sx={{
-                                                    textTransform: 'none'
-                                                }}
-                                            >
-                                                Ajouter une formation
-                                            </Button>
-                                            <Button
-                                                type="submit"
-                                                variant="contained"
-                                                color="primary"
-                                                disabled={isLoading}
-                                                sx={{ textTransform: 'none' }}
-                                            >
-                                                {isLoading ? <CircularProgress size={20} sx={{ color: 'white' }} /> : "Enregistrer"}
-                                            </Button>
-                                        </Box>
-                                    </div>
-                                );
-                            }}
-                        </FieldArray>
-                    </Form>
-                )}
-            </Formik>
-        </Box>
+      <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+        <CircularProgress />
+      </Box>
     );
+  }
+
+  return (
+    <Box p={3} bgcolor="white" boxShadow={3} borderRadius={2} maxWidth={600} mx="auto">
+      <FormHead
+            title="Education"
+            description="Complétez les informations sur votre formation académique."
+        />
+      <>
+        {educationList.map((item, index) => (
+          <Grid mt={2} container key={index} spacing={2}>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <span>Diplôme obtenu</span>
+              <TextField
+                fullWidth
+                name="degree"
+                value={item.degree}
+                onChange={(e) => handleChangeEducation(index, e)}
+                margin="dense"
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <span>Etablissement fréquenté</span>
+              <TextField
+                fullWidth
+                name="schoolName"
+                value={item.schoolName}
+                onChange={(e) => handleChangeEducation(index, e)}
+                margin="dense"
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <span>Ville</span>
+              <TextField
+                fullWidth
+                name="city"
+                value={item.city}
+                onChange={(e) => handleChangeEducation(index, e)}
+                margin="dense"
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <span>Pays</span>
+              <TextField
+                fullWidth
+                name="country"
+                value={item.country}
+                onChange={(e) => handleChangeEducation(index, e)}
+                margin="dense"
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <span>Date de début</span>
+              <TextField
+                fullWidth
+                name="startDate"
+                value={formatDate(item.startDate)}
+                onChange={(e) => handleChangeEducation(index, e)}
+                margin="dense"
+                type="date"
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <span>Date de fin</span>
+              <TextField
+                fullWidth
+                name="endDate"
+                value={formatDate(item.endDate)}
+                onChange={(e) => handleChangeEducation(index, e)}
+                margin="dense"
+                type="date"
+              />
+            </Grid>
+            <Box textAlign="right">
+              <IconButton
+                color="error"
+                onClick={removeEducation}
+              >
+                <Delete />
+              </IconButton>
+            </Box>
+          </Grid>
+        ))}
+      </>
+
+      <Box mt={3} display="flex" justifyContent="space-between">
+        <Button
+          startIcon={<Add />}
+          onClick={addNewEducation}
+          variant="outlined"
+          color="primary"
+          sx={{ textTransform: 'none' }}
+        >
+          Ajouter une formation
+        </Button>
+        <Button
+          onClick={handleSubmit}
+          variant="contained"
+          color="primary"
+          disabled={loading}>
+          {loading ? "Enregistrement..." : "Sauvegarder"}
+        </Button>
+      </Box>
+    </Box>
+  );
 };
 
 export default EducationForm;

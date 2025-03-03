@@ -7,6 +7,7 @@ import Grid from "@mui/material/Grid2";
 import RichTextEditor from "../RichTextEditor";
 import { UpdateExperiences } from "../../api/resumes";
 import { SetCurrentResume } from "../../redux/slices/resumeSlice";
+import FormHead from "../ui/formsHead/FormHead";
 
 
 
@@ -23,17 +24,14 @@ const formField = {
 export default function ExperienceForm({enableNext, resumeId}) {
 
   const { resumeData, setResumeData } = useContext(ResumeInfoContext);
-
   const dispatch = useDispatch();
-
   const [loading, setLoading] = useState(false);
-
-
   const [experienceList, setExperienceList] = useState([
-    formField
+    formField ? formField : resumeData?.experiences
   ]);
 
-
+  console.log("resume Id",resumeId)
+  console.log("experiences",resumeData?.experiences)
 
   const formatDate = (date) => {
     if (!date) return "";
@@ -64,10 +62,10 @@ export default function ExperienceForm({enableNext, resumeId}) {
   }
 
    const handleSubmit = async () => {
-          loading(true);
-          const response = await UpdateExperiences(resumeId, experienceList);
+          setLoading(true);
+          const response = await UpdateExperiences(resumeId, resumeData.experiences);
   
-          if (response.success) {
+          if (response.success) { 
               dispatch(SetCurrentResume(response.data));
               enableNext(true);
           }
@@ -83,7 +81,8 @@ export default function ExperienceForm({enableNext, resumeId}) {
     if (resumeData?.experiences && resumeData?.experiences.length > 0) {
       setExperienceList(resumeData?.experiences);
     }
-  }, []);
+  }, [resumeData]);
+
 
   useEffect(() => {
     setResumeData((prev) => ({
@@ -96,11 +95,13 @@ export default function ExperienceForm({enableNext, resumeId}) {
 
   return (
     <Box p={3} bgcolor="white" boxShadow={3} borderRadius={2} maxWidth={600} mx="auto">
-      <Typography variant="h6" fontWeight="bold" mb={2}>Gérer les expériences</Typography>
-
+      <FormHead
+                title="Expériences professionnelles"
+                description="Ajouter une ou des expérience(s) professionnelle(s)"
+        />
       <>
         {experienceList.map((item, index) => (
-          <Grid container key={index} spacing={2}>
+          <Grid mt={2} container key={index} spacing={2}>
 
             <Grid size={{ xs: 12, sm: 6 }}>
               <span>Titre du poste</span>
@@ -150,7 +151,6 @@ export default function ExperienceForm({enableNext, resumeId}) {
               <span>Date de début</span>
               <TextField
                 fullWidth
-                //label="Titre du poste" 
                 name="startDate"
                 onChange={(e) => handleChangeExperience(index, e)}
                 margin="dense"
@@ -162,7 +162,6 @@ export default function ExperienceForm({enableNext, resumeId}) {
               <span>Date de fin</span>
               <TextField
                 fullWidth
-                //label="Titre du poste" 
                 name="enDate"
                 onChange={(e) => handleChangeExperience(index, e)}
                 margin="dense"
@@ -204,9 +203,10 @@ export default function ExperienceForm({enableNext, resumeId}) {
           sx={{ textTransform: 'none' }}
         >
           Ajouter une expérience
-        </Button>
+        </Button
+        >
         <Button
-          type="submit"
+          onClick={handleSubmit}
           variant="contained"
           color="primary"
           disabled={loading}>

@@ -20,7 +20,7 @@ const resumeSchema = new mongoose.Schema({
     country: { type: String },
     startDate: { type: Date },
     endDate: { type: Date },
-    description: { type: String }, // Peut être généré par l'IA
+    workSummary: { type: String }, // Peut être généré par l'IA
   }],
   skills: [{ type: String }], // Liste de compétences
   educations: [{

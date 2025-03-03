@@ -22,18 +22,12 @@ import { GenerateExperienceList } from '../api/resumes';
 
 function RichTextEditor({ onRichTextEditorChange,index }) {
 
-    const { resumeData, setResumeData } = useContext(ResumeInfoContext);
-  
-
+  const { resumeData, setResumeData } = useContext(ResumeInfoContext);
   const [value, setValue] = useState('');
-
   const [isLoading, setIsLoading] = useState(false);
 
 
-  function onChange(e) {
-    setValue(e.target.value);
-  }
-
+  
    const handleGenerateExpList = async (index) => {
   
       setIsLoading(true)
@@ -79,7 +73,7 @@ function RichTextEditor({ onRichTextEditorChange,index }) {
         <Editor value={value} onChange={(e) => {
           setValue(e.target.value)
           onRichTextEditorChange(e)
-        }}>
+        }}> 
           <Toolbar>
             <BtnUndo />
             <BtnRedo />

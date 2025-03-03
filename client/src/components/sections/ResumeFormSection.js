@@ -89,10 +89,10 @@ function ResumeFormSection({resumeId}) {
 
 
         {/**Experiences */}
-        {activeFormIndex == 5 ? <ExperienceForm resumeId={resumeId} enableNext={(v)=>setEnableNext(v)} /> : null }
+        {activeFormIndex == 4 ? <ExperienceForm resumeId={resumeId} enableNext={(v)=>setEnableNext(v)} /> : null }
           
         {/**Education */}
-        {activeFormIndex == 6 ? <EducationForm resumeId={resumeId} enableNext={(v)=>setEnableNext(v)} /> : null }
+        {activeFormIndex == 5 ? <EducationForm resumeId={resumeId} enableNext={(v)=>setEnableNext(v)} /> : null }
 
 
 
