@@ -21,10 +21,8 @@ const EducationForm = ({ enableNext, resumeId }) => {
   const { resumeData, setResumeData } = useContext(ResumeInfoContext);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
-  const [educationList, setEducationList] = useState([formField]);
+  const [educationList, setEducationList] = useState(resumeData?.educations || [formField]);
 
-  console.log("resume Id", resumeId)
-  console.log("educations", resumeData?.educations)
 
   const formatDate = (date) => {
     if (!date) return "";
@@ -61,12 +59,12 @@ const EducationForm = ({ enableNext, resumeId }) => {
     }, 1000);
   };
 
-  useEffect(() => {
+  {/* useEffect(() => {
     if (resumeData?.educations && resumeData?.educations.length > 0) {
       setEducationList(resumeData.educations);
     }
     setLoading(false);
-  }, [resumeData]);
+  }, [resumeData]);*/}
 
   useEffect(() => {
     setResumeData((prev) => ({
@@ -75,13 +73,13 @@ const EducationForm = ({ enableNext, resumeId }) => {
     }));
   }, [educationList]);
 
-  if (loading) {
+ {/* if (loading) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
         <CircularProgress />
       </Box>
     );
-  }
+  }*/}
 
   return (
     <Box p={3} bgcolor="white" boxShadow={3} borderRadius={2} maxWidth={600} mx="auto">
@@ -97,7 +95,7 @@ const EducationForm = ({ enableNext, resumeId }) => {
               <TextField
                 fullWidth
                 name="degree"
-                value={item.degree}
+                value={item?.degree}
                 onChange={(e) => handleChangeEducation(index, e)}
                 margin="dense"
               />
@@ -107,7 +105,7 @@ const EducationForm = ({ enableNext, resumeId }) => {
               <TextField
                 fullWidth
                 name="schoolName"
-                value={item.schoolName}
+                value={item?.schoolName}
                 onChange={(e) => handleChangeEducation(index, e)}
                 margin="dense"
               />
@@ -117,7 +115,7 @@ const EducationForm = ({ enableNext, resumeId }) => {
               <TextField
                 fullWidth
                 name="city"
-                value={item.city}
+                value={item?.city}
                 onChange={(e) => handleChangeEducation(index, e)}
                 margin="dense"
               />
@@ -127,7 +125,7 @@ const EducationForm = ({ enableNext, resumeId }) => {
               <TextField
                 fullWidth
                 name="country"
-                value={item.country}
+                value={item?.country}
                 onChange={(e) => handleChangeEducation(index, e)}
                 margin="dense"
               />
@@ -137,7 +135,7 @@ const EducationForm = ({ enableNext, resumeId }) => {
               <TextField
                 fullWidth
                 name="startDate"
-                value={formatDate(item.startDate)}
+                value={formatDate(item?.startDate)}
                 onChange={(e) => handleChangeEducation(index, e)}
                 margin="dense"
                 type="date"
@@ -148,7 +146,7 @@ const EducationForm = ({ enableNext, resumeId }) => {
               <TextField
                 fullWidth
                 name="endDate"
-                value={formatDate(item.endDate)}
+                value={formatDate(item?.endDate)}
                 onChange={(e) => handleChangeEducation(index, e)}
                 margin="dense"
                 type="date"

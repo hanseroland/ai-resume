@@ -36,7 +36,7 @@ const EducationDetailPreview = ({ resumeData }) => {
         resumeData?.educations.map((edu, index) => (
           <Box key={index} mb={4}>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={2}>
+              <Grid size={{xs:12,sm:10}}>
                 {/* Icône ou logo */}
                 <SchoolIcon
                   sx={{
@@ -45,7 +45,7 @@ const EducationDetailPreview = ({ resumeData }) => {
                   }}
                 />
               </Grid>
-              <Grid item xs={12} sm={10}>
+              <Grid size={{xs:12,sm:10}}>
                 <Stack spacing={1}>
                   <Typography variant="h6" fontWeight="bold">
                     {edu.degree || "Diplôme non spécifié"}

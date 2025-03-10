@@ -36,7 +36,7 @@ const ExperienceDetailPreview = memo(({ resumeData }) => {
         resumeData?.experiences.map((experience, index) => (
           <Box key={index} mb={2}>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={10}>
+              <Grid size={{xs:12,sm:10}}>
                 <Stack spacing={1}>
                  
                     <Typography variant="h6" fontWeight="bold">

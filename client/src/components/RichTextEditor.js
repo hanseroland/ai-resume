@@ -1,5 +1,5 @@
 import { Box, Button, CircularProgress } from '@mui/material';
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import {
   BtnBold,
   BtnBulletList,
@@ -20,12 +20,16 @@ import { ResumeInfoContext } from '../context/ResumeInfoContext';
 import { GenerateExperienceList } from '../api/resumes';
 
 
-function RichTextEditor({ onRichTextEditorChange,index }) {
+function RichTextEditor({value:initialValue, onRichTextEditorChange,index }) {
 
   const { resumeData, setResumeData } = useContext(ResumeInfoContext);
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState(initialValue || "");
   const [isLoading, setIsLoading] = useState(false);
 
+
+  useEffect(() => {
+    setValue(initialValue);
+  }, [initialValue]);
 
   
    const handleGenerateExpList = async (index) => {
@@ -47,9 +51,7 @@ function RichTextEditor({ onRichTextEditorChange,index }) {
   
       if (response.data) {
         setValue(response.data);
-        //setOpenDialog(true);
-        //setSelectedExperienceIndex(index); // Stocke l'index de l'expérience concernée
-  
+        onRichTextEditorChange(response.data);
       }
       setIsLoading(false)
   
@@ -72,7 +74,7 @@ function RichTextEditor({ onRichTextEditorChange,index }) {
       <EditorProvider>
         <Editor value={value} onChange={(e) => {
           setValue(e.target.value)
-          onRichTextEditorChange(e)
+          onRichTextEditorChange(e.target.value)
         }}> 
           <Toolbar>
             <BtnUndo />

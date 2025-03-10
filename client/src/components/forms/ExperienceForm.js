@@ -26,12 +26,9 @@ export default function ExperienceForm({enableNext, resumeId}) {
   const { resumeData, setResumeData } = useContext(ResumeInfoContext);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-  const [experienceList, setExperienceList] = useState([
-    formField ? formField : resumeData?.experiences
-  ]);
+  const [experienceList, setExperienceList] =  useState(resumeData?.experiences || [formField]);
 
-  console.log("resume Id",resumeId)
-  console.log("experiences",resumeData?.experiences)
+
 
   const formatDate = (date) => {
     if (!date) return "";
@@ -54,16 +51,16 @@ export default function ExperienceForm({enableNext, resumeId}) {
     setExperienceList(experienceList => experienceList.slice(0, -1))
   }
 
-  const handleRichTextEditorChange = (e, name, index) => {
+  const handleRichTextEditorChange = (value, name, index) => {
     const newEntries = experienceList.slice();
-    newEntries[index][name] = e.target.value;
+    newEntries[index][name] = value;
     setExperienceList(newEntries)
 
   }
 
    const handleSubmit = async () => {
           setLoading(true);
-          const response = await UpdateExperiences(resumeId, resumeData.experiences);
+          const response = await UpdateExperiences(resumeId, experienceList);
   
           if (response.success) { 
               dispatch(SetCurrentResume(response.data));
@@ -73,22 +70,16 @@ export default function ExperienceForm({enableNext, resumeId}) {
           setTimeout(() => {
               alert("Détails enregistrés avec succès !");
           }, 1000);
-      };
+    };
 
-  
 
-  useEffect(() => {
-    if (resumeData?.experiences && resumeData?.experiences.length > 0) {
-      setExperienceList(resumeData?.experiences);
-    }
-  }, [resumeData]);
 
 
   useEffect(() => {
-    setResumeData((prev) => ({
-      ...prev,
+    setResumeData({
+      ...resumeData,
       experiences: experienceList,
-    }));
+    });
   }, [experienceList]);
 
  
@@ -100,84 +91,78 @@ export default function ExperienceForm({enableNext, resumeId}) {
                 description="Ajouter une ou des expérience(s) professionnelle(s)"
         />
       <>
-        {experienceList.map((item, index) => (
+      {experienceList.map((item, index) => (
           <Grid mt={2} container key={index} spacing={2}>
-
             <Grid size={{ xs: 12, sm: 6 }}>
               <span>Titre du poste</span>
               <TextField
                 fullWidth
-                //label="Titre du poste" 
                 name="jobTitle"
+                value={item?.jobTitle}
                 onChange={(e) => handleChangeExperience(index, e)}
                 margin="dense"
               />
-
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
               <span>Nom de l'entreprise</span>
               <TextField
                 fullWidth
-                //label="Titre du poste" 
                 name="companyName"
+                value={item?.companyName}
                 onChange={(e) => handleChangeExperience(index, e)}
                 margin="dense"
               />
-
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
               <span>Ville</span>
               <TextField
                 fullWidth
-                //label="Titre du poste" 
                 name="city"
+                value={item?.city}
                 onChange={(e) => handleChangeExperience(index, e)}
                 margin="dense"
               />
-
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
               <span>Pays</span>
               <TextField
                 fullWidth
-                //label="Titre du poste" 
                 name="country"
+                value={item?.country}
                 onChange={(e) => handleChangeExperience(index, e)}
                 margin="dense"
               />
-
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
               <span>Date de début</span>
               <TextField
                 fullWidth
                 name="startDate"
+                value={formatDate(item?.startDate)}
                 onChange={(e) => handleChangeExperience(index, e)}
                 margin="dense"
                 type="date"
               />
-
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
               <span>Date de fin</span>
               <TextField
                 fullWidth
-                name="enDate"
+                name="endDate"
+                value={formatDate(item?.endDate)}
                 onChange={(e) => handleChangeExperience(index, e)}
                 margin="dense"
                 type="date"
               />
-
             </Grid>
             <Grid size={{ xs: 12, sm: 12 }}>
-
               <RichTextEditor
                 index={index}
-                onRichTextEditorChange={(e) => handleRichTextEditorChange(e, 'workSummary', index)}
+                value={item?.workSummary} 
+                onRichTextEditorChange={(value) => handleRichTextEditorChange(value, 'workSummary', index)}
               />
-
             </Grid>
-            <Box textAlign="right" >
+            <Box textAlign="right">
               <IconButton
                 color="error"
                 onClick={RemoveExperience}
@@ -185,10 +170,7 @@ export default function ExperienceForm({enableNext, resumeId}) {
                 <Delete />
               </IconButton>
             </Box>
-
-
           </Grid>
-
         ))}
 
 
