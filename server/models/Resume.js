@@ -22,7 +22,7 @@ const resumeSchema = new mongoose.Schema({
     endDate: { type: Date },
     workSummary: { type: String }, // Peut être généré par l'IA
   }],
-  skills: [{ type: String }], // Liste de compétences
+  skills: [{ name:{ type: String},level:{Number} }], // Liste de compétences
   educations: [{
     degree: { type: String,  },
     schoolName: { type: String,  },
