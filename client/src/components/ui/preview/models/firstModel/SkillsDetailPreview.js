@@ -5,6 +5,15 @@ import Grid from '@mui/material/Grid2';
 
 
 const SkillsDetailPreview = ({ resumeData }) => {
+
+  const renderStars = (level) => {
+    const stars = [];
+    for (let i = 0; i < level; i++) {
+      stars.push(<StarIcon key={i} />);
+    }
+    return stars;
+  };
+
   return (
     <Box
       sx={{
@@ -32,10 +41,10 @@ const SkillsDetailPreview = ({ resumeData }) => {
       <Grid container spacing={2}>
         {resumeData?.skills && resumeData?.skills.length > 0 ? (
           resumeData?.skills.map((skill, index) => (
-            <Grid item key={index}>
+            <Grid size={{ xs:3, sm: 6 }} key={index}>
               <Chip
-                label={skill}
-                icon={<StarIcon />}
+                label={skill?.name}
+                icon={<>{renderStars(skill?.level)}</>}
                 sx={{
                   fontSize: "14px",
                   fontWeight: "bold",

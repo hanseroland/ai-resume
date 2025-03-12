@@ -5,6 +5,7 @@ import {  Apps, ArrowLeft, ArrowRight } from '@mui/icons-material'
 import SummaryForm from '../forms/SummaryForm'
 import ExperienceForm from '../forms/ExperienceForm'
 import EducationForm from '../forms/EducationForm'
+import SkillForm from '../forms/SkillForm'
 
 function ResumeFormSection({resumeId}) {
 
@@ -87,6 +88,7 @@ function ResumeFormSection({resumeId}) {
 
         {/**Compétences */}
 
+        {activeFormIndex == 3 ? <SkillForm resumeId={resumeId} enableNext={(v)=>setEnableNext(v)} /> : null }
 
         {/**Experiences */}
         {activeFormIndex == 4 ? <ExperienceForm resumeId={resumeId} enableNext={(v)=>setEnableNext(v)} /> : null }

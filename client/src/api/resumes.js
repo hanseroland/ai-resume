@@ -66,3 +66,9 @@ export const UpdateEducations = async (resumeId, values) => {
     const response = await axiosInstance("put", `/resumes/update-educations-info/${resumeId}`,values);
     return response;
 };
+
+//modifier les compétences
+export const UpdateSkills = async (resumeId, values) => {
+    const response = await axiosInstance("put", `/resumes/update-skills-info/${resumeId}`,values);
+    return response;
+};

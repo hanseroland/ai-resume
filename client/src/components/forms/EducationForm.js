@@ -59,12 +59,12 @@ const EducationForm = ({ enableNext, resumeId }) => {
     }, 1000);
   };
 
-  {/* useEffect(() => {
+   useEffect(() => {
     if (resumeData?.educations && resumeData?.educations.length > 0) {
-      setEducationList(resumeData.educations);
+        setEducationList(resumeData.educations);
     }
     setLoading(false);
-  }, [resumeData]);*/}
+  }, []);
 
   useEffect(() => {
     setResumeData((prev) => ({
@@ -73,13 +73,15 @@ const EducationForm = ({ enableNext, resumeId }) => {
     }));
   }, [educationList]);
 
- {/* if (loading) {
+ 
+
+ if (loading) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
         <CircularProgress />
       </Box>
     );
-  }*/}
+  }
 
   return (
     <Box p={3} bgcolor="white" boxShadow={3} borderRadius={2} maxWidth={600} mx="auto">
