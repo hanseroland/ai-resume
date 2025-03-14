@@ -70,6 +70,8 @@ router.get('/user/:userId',async(req,res)=>{
 //Route pour créer un nouveau CV
 router.post('/create', async (req, res) => {
 
+  //console.log("first",req.body)
+
     const { userId, title } = req.body;
   
     try {
@@ -78,7 +80,8 @@ router.post('/create', async (req, res) => {
       if (!user) {
         return res.status(404).json({ error: 'Utilisateur introuvable.' });
       }
-  
+     // console.log("UserId",userId)
+
       // Créer un nouveau CV
       const newResume = new Resume({
         userId: userId,
@@ -101,12 +104,15 @@ router.post('/create', async (req, res) => {
   
       // Sauvegarder le CV
       const savedResume = await newResume.save();
+
+     // console.log("savedResume",savedResume)
   
       // Ajouter l'ID du CV dans le modèle User
       user.resumes.push(savedResume._id);
       await user.save();
   
       // Répondre avec les détails du CV créé
+      console.log("savedResume",savedResume)
       res.status(201).json({
         success:true,
         message: 'CV créé avec succès.',
@@ -485,6 +491,26 @@ router.put('/update-skills-info/:resumeId', async (req, res) => {
   }
 });
 
+
+// Supprimer un utilisateur
+router.delete('/delete-resume/:id', async (req, res) => {
+   
+
+    try {
+        
+        const deletedResume = await Resume.findByIdAndDelete(req.params.id);
+       
+        if (!deletedResume) {
+            return res.status(404).json({ success: false, message: 'CV introuvable.' });
+        }
+       
+        res.status(200).json({ success: true, message: 'CV supprimé avec succès.' });
+        
+
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
 
 
 

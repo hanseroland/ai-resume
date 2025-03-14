@@ -4,7 +4,7 @@ import { Alert, Box, CircularProgress, Typography } from '@mui/material'
 import Grid from '@mui/material/Grid2';
 import AddResumeBtn from '../components/ui/AddResumeBtn';
 import { useSelector } from 'react-redux';
-import { GetUserResumes } from '../api/resumes';
+import { DeleteResume, GetUserResumes } from '../api/resumes';
 import ResumeCard from '../components/ui/cards/ResumeCard';
 
 
@@ -15,6 +15,7 @@ function Resumes() {
   const [resumeCreated, setResumeCreated] = React.useState(false)// afficher la notification de CV créé
 
   const [userResumes, setUserResumes] = React.useState([]); // Stocke les CV de l'utilisateur
+  
   const [loading, setLoading] = React.useState(true); // Indique si les données sont en cours de chargement
 
   // Fonction pour récupérer les CV
@@ -22,7 +23,10 @@ function Resumes() {
     try {
 
       const response = await GetUserResumes(currentUser._id);
-      setUserResumes(response.data || []); // Met à jour les CV
+      if (response.success){
+        setUserResumes(response.data || []); // Met à jour les CV
+      }
+
     } catch (err) {
       console.error('Erreur lors de la récupération des CV :', err);
     } finally {
@@ -39,6 +43,15 @@ function Resumes() {
     }
   }, [resumeCreated,currentUser]); // Relance la récupération des CV lorsqu'un nouveau CV est créé
 
+
+  const removeResume = async (resumeId) => {
+
+       const response = await DeleteResume(resumeId);
+        if (response.success){
+           alert("CV supprimé avec succès");
+           fetchResumes();
+        }
+  }
 
 
   return (
@@ -92,7 +105,10 @@ function Resumes() {
                 ? 
                   userResumes.map((resume) => (
                     <Grid key={resume._id} item lg={3} md={4} sm={6} xs={12}>
-                      <ResumeCard resume={resume} />
+                      <ResumeCard 
+                        resume={resume} 
+                        removeResume={removeResume}
+                      />
                     </Grid>
                   ))
                 :

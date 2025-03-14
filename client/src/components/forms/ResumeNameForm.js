@@ -9,7 +9,7 @@ import { SetCurrentResume } from '../../redux/slices/resumeSlice';
 import { useNavigate } from 'react-router-dom';
 
 
-const ResumeNameForm = ({setOpenDialog,setResumeCreated, setRefreshTrigger }) => {
+const ResumeNameForm = ({ setOpenDialog, setResumeCreated, setRefreshTrigger }) => {
 
   const { currentUser } = useSelector(state => state.users);
   const dispatch = useDispatch();
@@ -24,26 +24,27 @@ const ResumeNameForm = ({setOpenDialog,setResumeCreated, setRefreshTrigger }) =>
   // Soumission du formulaire
   const handleSubmit = async (values, { resetForm }) => {
     setOpenDialog(false)
-    try { 
+    try {
 
       const newValues = {
         title: values.title,
         userId: currentUser._id
       };
 
-     // console.log("new valuse",newValues)
-     
-      const response = await CreateResume(newValues) 
-      if (response.success) {
-          //console.log("oui success")
-          dispatch(SetCurrentResume(response.data));
-          setResumeCreated(true)
-          //setRefreshTrigger(prev => !prev);
+      // console.log("new valuse",newValues)
+
+      const response = await CreateResume(newValues)
+      if (response.success && response.data) {
+        dispatch(SetCurrentResume(response.data));
+        setResumeCreated(true)
+        resetForm()
+        setOpenDialog(false)
+        navigate(`/resumes/${response.data._id}/edit`)
+      } else {
+        throw new Error('La réponse de l\'API est invalide.');
       }
-      resetForm()
-      setOpenDialog(false)
-      navigate(`/resumes/${response.data._id}/edit`)
-      
+
+
     } catch (error) {
       console.error('Erreur lors de la création du CV :', error);
       alert('Une erreur est survenue.');
@@ -56,9 +57,9 @@ const ResumeNameForm = ({setOpenDialog,setResumeCreated, setRefreshTrigger }) =>
     <Box >
       <Formik
         initialValues={{
-            title: '',
-            userId:currentUser._id
-           
+          title: '',
+          userId: currentUser._id
+
         }}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
@@ -67,7 +68,7 @@ const ResumeNameForm = ({setOpenDialog,setResumeCreated, setRefreshTrigger }) =>
         {({ errors, touched }) => (
           <Form>
             <Grid container spacing={2}>
-            
+
               <Grid item size={{ xs: 12, md: 12 }}>
                 <Field
                   as={TextField}
@@ -78,15 +79,15 @@ const ResumeNameForm = ({setOpenDialog,setResumeCreated, setRefreshTrigger }) =>
                   helperText={touched.title && errors.title}
                 />
               </Grid>
-             
-             
+
+
 
             </Grid>
             <Box mt={3} display="flex" justifyContent="flex-end">
-             <Button variant="outlined"  color="inherit" autoFocus onClick={()=>setOpenDialog(false)}>
-                 Annuler
+              <Button variant="outlined" color="inherit" autoFocus onClick={() => setOpenDialog(false)}>
+                Annuler
               </Button>
-              <Button sx={{marginLeft:'5px'}} variant="contained" color="primary" type="submit">
+              <Button sx={{ marginLeft: '5px' }} variant="contained" color="primary" type="submit">
                 Créer
               </Button>
             </Box>

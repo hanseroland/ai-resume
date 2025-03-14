@@ -24,6 +24,12 @@ export const CreateResume = async (values) => {
     return response;
 };
 
+//supprimer un cv
+export const DeleteResume = async (resumeId) => {
+    const response = await axiosInstance("delete", `/resumes/delete-resume/${resumeId}`);
+    return response;
+};
+
 //modifier les info personnelles
 export const UpdatePersonalInfo = async (resumeId, values) => {
     const response = await axiosInstance("put", `/resumes/update-personal-info/${resumeId}`,values);
