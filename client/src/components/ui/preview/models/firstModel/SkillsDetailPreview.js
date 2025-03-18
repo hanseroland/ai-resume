@@ -4,12 +4,12 @@ import StarIcon from "@mui/icons-material/Star";
 import Grid from '@mui/material/Grid2';
 
 
-const SkillsDetailPreview = ({ resumeData }) => {
+const SkillsDetailPreview = ({ resumeData,cvColor }) => {
 
   const renderStars = (level) => {
     const stars = [];
     for (let i = 0; i < level; i++) {
-      stars.push(<StarIcon key={i} />);
+      stars.push(<StarIcon key={i} sx={{color:`${cvColor}`}} />);
     }
     return stars;
   };
@@ -29,7 +29,7 @@ const SkillsDetailPreview = ({ resumeData }) => {
         color="textPrimary"
         gutterBottom
         sx={{
-          borderBottom: "2px solid #000",
+          borderBottom: `2px solid ${cvColor}`,
           display: "inline-block",
           mb: 3,
         }}
@@ -51,7 +51,7 @@ const SkillsDetailPreview = ({ resumeData }) => {
                   //backgroundColor: "#000",
                   color: "#000",
                   "& .MuiChip-icon": {
-                    color: "#FFD700",
+                    color:`${cvColor}`,
                   },
                 }}
               />

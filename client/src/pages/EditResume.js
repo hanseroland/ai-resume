@@ -5,8 +5,8 @@ import Grid from "@mui/material/Grid2";
 import ResumeFormSection from "../components/sections/ResumeFormSection";
 import ResumePreview from "../components/ui/preview/ResumePreview";
 import { ResumeInfoContext } from "../context/ResumeInfoContext";
-import { fakeResume } from "../data/fakeResume";
 import { GetOneResume } from "../api/resumes";
+import { ResumeStyleContext } from "../context/ResumeStyleContext";
 
 function EditResume() {
 
@@ -17,6 +17,8 @@ function EditResume() {
   const [resumeData, setResumeData] = useState();
 
   const [loading, setLoading] = useState(true); // Indique si les données sont en cours de chargement
+
+  const [cvColor, setCvColor] = useState("#000"); // Couleur par défaut
 
 
   // Fonction pour récupérer le CV
@@ -41,16 +43,11 @@ function EditResume() {
       }
     }, []); // Relance la récupération du CV
   
-  
-  /*useEffect(() => {
-    setResumeData(fakeResume);
-  }, []);*/
-
-
-
+ 
 
 
   return (
+    <ResumeStyleContext.Provider value={{ cvColor, setCvColor }}>
     <ResumeInfoContext.Provider value={{ resumeData,setResumeData }}>
       <Box py={2}>
         <Grid container spacing={2}>
@@ -80,6 +77,7 @@ function EditResume() {
         </Grid>
       </Box>
     </ResumeInfoContext.Provider>
+    </ResumeStyleContext.Provider>
   );
 }
 

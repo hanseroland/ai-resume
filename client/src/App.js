@@ -11,6 +11,7 @@ import SignupPage from './pages/SignUpPage';
 import SignInPage from './pages/SignInPage';
 import SimpleLayout from './components/Layouts/SimpleLayout';
 import EditResume from './pages/EditResume';
+import { ToastContainer } from 'react-toastify';
 
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
           </Route>
         </Routes>
       </Router>
+      <ToastContainer/>
     </Provider>
 
 

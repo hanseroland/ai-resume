@@ -4,7 +4,7 @@ import SchoolIcon from "@mui/icons-material/School";
 import Grid from '@mui/material/Grid2';
 
 
-const EducationDetailPreview = ({ resumeData }) => {
+const EducationDetailPreview = ({ resumeData,cvColor }) => {
   return (
     <Box
       sx={{
@@ -20,7 +20,7 @@ const EducationDetailPreview = ({ resumeData }) => {
         color="textPrimary"
         gutterBottom
         sx={{
-          borderBottom: "2px solid #000",
+          borderBottom: `2px solid ${cvColor}`,
           display: "inline-block",
           pb: 0.5,
           mb:2,

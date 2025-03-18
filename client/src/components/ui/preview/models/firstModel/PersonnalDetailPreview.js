@@ -4,7 +4,7 @@ import { Email, Phone, LocationOn } from "@mui/icons-material";
 import Grid from '@mui/material/Grid2';
 
 
-const PersonalDetailPreview = ({resumeData}) => {
+const PersonalDetailPreview = ({resumeData,cvColor}) => {
   if (!resumeData) return null;
 
   return (
@@ -25,7 +25,7 @@ const PersonalDetailPreview = ({resumeData}) => {
         <Grid container spacing={1} mt={1}>
           {/* Address */}
           <Grid  size={{xs:6}} display="flex" alignItems="center">
-            <LocationOn fontSize="small" color="action" sx={{ mr: 1 }} />
+            <LocationOn fontSize="small"  sx={{ mr: 1, color:`${cvColor}` }} />
             <Typography variant="body2" color="text.secondary">
               {resumeData.personalInfo?.address}
             </Typography>
@@ -33,7 +33,7 @@ const PersonalDetailPreview = ({resumeData}) => {
 
           {/* Phone */}
           <Grid size={{xs:6}}  display="flex" alignItems="center">
-            <Phone fontSize="small" color="action" sx={{ mr: 1 }} />
+            <Phone fontSize="small"  sx={{ mr: 1, color:`${cvColor}`  }} />
             <Typography variant="body2" color="text.secondary">
               {resumeData.personalInfo?.phone}
             </Typography>
@@ -41,7 +41,7 @@ const PersonalDetailPreview = ({resumeData}) => {
 
           {/* Email */}
           <Grid size={{xs:12}} display="flex" alignItems="center">
-            <Email fontSize="small" color="action" sx={{ mr: 1 }} />
+            <Email fontSize="small"  sx={{ mr: 1, color:`${cvColor}`  }} />
             <Typography variant="body2" color="text.secondary">
               {resumeData.personalInfo?.email}
             </Typography>

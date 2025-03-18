@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Typography, Divider } from "@mui/material";
 
-const SummaryDetailPreview = ({resumeData}) => {
+const SummaryDetailPreview = ({resumeData,cvColor}) => {
   return (
     <Box
       sx={{
@@ -14,10 +14,10 @@ const SummaryDetailPreview = ({resumeData}) => {
       <Typography
         variant="h5"
         fontWeight="bold"
-         color="textPrimary"
+        color="textPrimary"
         gutterBottom
         sx={{
-          borderBottom: "2px solid rgb(0, 0, 0)",
+          borderBottom: `2px solid ${cvColor}`,
           display: "inline-block",
           pb: 0.5,
           mb:2,
@@ -26,7 +26,7 @@ const SummaryDetailPreview = ({resumeData}) => {
         Résumé Professionnel
       </Typography>
 
-      <Divider sx={{ my: 1 }} />
+      <Divider sx={{ my: 1}} />
 
       {/* Contenu du résumé */}
       <Typography

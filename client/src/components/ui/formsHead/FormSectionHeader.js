@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Box, Button, IconButton } from '@mui/material';
 import { Apps, ArrowLeft, ArrowRight, Palette, Close } from '@mui/icons-material';
+import { ResumeStyleContext } from '../../../context/ResumeStyleContext';
 
 const colors = ['#000','#4CAF50', '#FFEB3B', '#F44336', '#2196F3', '#9C27B0', '#E91E63', '#795548'];
 
-const FormSectionHeader = ({ activeFormIndex, setActiveFormIndex, enableNext, setCvColor }) => {
+const FormSectionHeader = ({ activeFormIndex, setActiveFormIndex, enableNext }) => {
+ 
+  const { setCvColor } = useContext(ResumeStyleContext); // Utilisation du contexte
+
   const [showColors, setShowColors] = useState(false);
 
   return (

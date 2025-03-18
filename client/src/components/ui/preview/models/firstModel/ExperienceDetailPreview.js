@@ -4,7 +4,7 @@ import WorkIcon from "@mui/icons-material/Work";
 import Grid from '@mui/material/Grid2';
 
 
-const ExperienceDetailPreview = memo(({ resumeData }) => {
+const ExperienceDetailPreview = memo(({ resumeData,cvColor }) => {
   return (
     <Box
       sx={{
@@ -20,7 +20,7 @@ const ExperienceDetailPreview = memo(({ resumeData }) => {
         color="textPrimary"
         gutterBottom
         sx={{
-          borderBottom: "2px solid #000",
+          borderBottom: `2px solid ${cvColor}`,
           display: "inline-block",
           pb: 0.5,
           mb: 3,

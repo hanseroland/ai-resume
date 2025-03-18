@@ -9,7 +9,7 @@ import FormSectionHeader from '../ui/formsHead/FormSectionHeader'
 
 function ResumeFormSection({resumeId}) {
 
-   const [activeFormIndex, setActiveFormIndex] = useState(5)
+   const [activeFormIndex, setActiveFormIndex] = useState(1)
 
    const [enableNext,setEnableNext] = useState(false)
 

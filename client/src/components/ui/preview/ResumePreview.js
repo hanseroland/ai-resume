@@ -6,26 +6,29 @@ import SummaryDetailPreview from './models/firstModel/SummaryDetailPreview'
 import SkillsDetailPreview from './models/firstModel/SkillsDetailPreview'
 import ExperienceDetailPreview from './models/firstModel/ExperienceDetailPreview'
 import EducationDetailPreview from './models/firstModel/EducationDetailPreview'
+import { ResumeStyleContext } from '../../../context/ResumeStyleContext'
 
 
 
 function ResumePreview() {
 
-const {resumeData,setResumeData} = useContext(ResumeInfoContext)
+const {resumeData} = useContext(ResumeInfoContext)
+const { cvColor } = useContext(ResumeStyleContext); // Récupérer la couleur
+
 
 //console.log("context",resumeData)
   return (
     <Box>
         {/**Infos personnelles */}
-         <PersonnalDetailPreview  resumeData={resumeData} />
+         <PersonnalDetailPreview cvColor={cvColor}  resumeData={resumeData} />
         {/**Résumé */}
-          <SummaryDetailPreview resumeData={resumeData} />
+          <SummaryDetailPreview cvColor={cvColor} resumeData={resumeData} />
         {/**Compétences */}
-          <SkillsDetailPreview  resumeData={resumeData} />
+          <SkillsDetailPreview cvColor={cvColor}  resumeData={resumeData} />
         {/**Experiences */}
-          <ExperienceDetailPreview resumeData={resumeData} />
+          <ExperienceDetailPreview cvColor={cvColor} resumeData={resumeData} />
         {/**Education */}
-          <EducationDetailPreview resumeData={resumeData} />
+          <EducationDetailPreview cvColor={cvColor} resumeData={resumeData} />
       
 
     </Box>
