@@ -78,3 +78,16 @@ export const UpdateSkills = async (resumeId, values) => {
     const response = await axiosInstance("put", `/resumes/update-skills-info/${resumeId}`,values);
     return response;
 };
+
+//modifier les projets
+export const UpdateProjects = async (resumeId, values) => {
+    const response = await axiosInstance("put", `/resumes/update-projects-info/${resumeId}`,values);
+    return response;
+};
+
+
+//modifier les certifications
+export const UpdateCertifications = async (resumeId, values) => {
+    const response = await axiosInstance("put", `/resumes/update-certifications-info/${resumeId}`,values);
+    return response;
+};

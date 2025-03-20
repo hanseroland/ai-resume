@@ -32,6 +32,7 @@ const resumeSchema = new mongoose.Schema({
     endDate: { type: Date },
   }],
   hobbies: [{ type: String }],
+  languages: [{ name:{ type: String},note:{String} }],
   certifications: [{
     title: { type: String,  },
     issuingOrganization: { type: String },
