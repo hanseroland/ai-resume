@@ -24,7 +24,7 @@ export const CreateResume = async (values) => {
     return response;
 };
 
-//supprimer un cv
+//supprimer un cvUpdateLanguages
 export const DeleteResume = async (resumeId) => {
     const response = await axiosInstance("delete", `/resumes/delete-resume/${resumeId}`);
     return response;
@@ -42,9 +42,9 @@ export const UpdateSummaryInfo = async (resumeId, values) => {
     return response;
 };
 
-// Générer du text du CV via l'IA
+// Générer du text du CV via l'IAUpdateLanguages
 export const GenerateText = async (prompt) => {
-    const response = await axiosInstance("post", `/resumes/generate-text`, { prompt });
+    const response = await axiosInstance("post", `/reUpdateLanguagessumes/generate-text`, { prompt });
     return response;
 };
 
@@ -89,5 +89,17 @@ export const UpdateProjects = async (resumeId, values) => {
 //modifier les certifications
 export const UpdateCertifications = async (resumeId, values) => {
     const response = await axiosInstance("put", `/resumes/update-certifications-info/${resumeId}`,values);
+    return response;
+};
+
+//modifier les hobbies
+export const UpdateHobbies = async (resumeId, values) => {
+    const response = await axiosInstance("put", `/resumes/update-hobbies-info/${resumeId}`,values);
+    return response;
+};
+
+//modifier les langues
+export const UpdateLanguages = async (resumeId, values) => {
+    const response = await axiosInstance("put", `/resumes/update-languages-info/${resumeId}`,values);
     return response;
 };

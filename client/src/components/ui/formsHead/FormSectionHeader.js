@@ -1,15 +1,27 @@
 import React, { useContext, useState } from 'react';
-import { Box, Button, IconButton } from '@mui/material';
+import { Box, Button, IconButton, Tooltip, Popover } from '@mui/material';
 import { Apps, ArrowLeft, ArrowRight, Palette, Close } from '@mui/icons-material';
 import { ResumeStyleContext } from '../../../context/ResumeStyleContext';
+import SectionManager from './SectionManager';
 
-const colors = ['#000','#4CAF50', '#FFEB3B', '#F44336', '#2196F3', '#9C27B0', '#E91E63', '#795548'];
+const colors = ['#000', '#4CAF50', '#FFEB3B', '#F44336', '#2196F3', '#9C27B0', '#E91E63', '#795548'];
 
 const FormSectionHeader = ({ activeFormIndex, setActiveFormIndex, enableNext }) => {
  
+  // Gérer les couleurs
+  const [colorAnchorEl, setColorAnchorEl] = useState(null);
   const { setCvColor } = useContext(ResumeStyleContext); // Utilisation du contexte
 
-  const [showColors, setShowColors] = useState(false);
+
+
+  // Gérer le menu des couleurs
+  const handleOpenColorMenu = (event) => {
+    setColorAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseColorMenu = () => {
+    setColorAnchorEl(null);
+  };
 
   return (
     <Box
@@ -32,24 +44,40 @@ const FormSectionHeader = ({ activeFormIndex, setActiveFormIndex, enableNext }) 
       }}
     >
       <Box sx={{ display: 'flex', gap: 1 }}>
-        <Button variant="outlined" startIcon={<Apps />} size="small" sx={{ textTransform: 'none' }}>
-          Thèmes
-        </Button>
+        <Tooltip title="Thèmes">
+          <Button variant="outlined" startIcon={<Apps />} size="small" sx={{ textTransform: 'none' }}>
+            Thèmes
+          </Button>
+        </Tooltip>
 
-        {!showColors && (
+        <Tooltip title="Couleurs">
           <Button
             variant="outlined"
             startIcon={<Palette />}
             size="small"
             sx={{ textTransform: 'none' }}
-            onClick={() => setShowColors(true)}
+            onClick={handleOpenColorMenu}
           >
             Couleurs
           </Button>
-        )}
+        </Tooltip>
       </Box>
 
-      {showColors && (
+      <SectionManager />
+
+      <Popover
+        anchorEl={colorAnchorEl}
+        open={Boolean(colorAnchorEl)}
+        onClose={handleCloseColorMenu}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+      >
         <Box
           sx={{
             display: 'flex',
@@ -60,57 +88,64 @@ const FormSectionHeader = ({ activeFormIndex, setActiveFormIndex, enableNext }) 
             borderRadius: 2,
             boxShadow: '0px 4px 10px rgba(0,0,0,0.1)',
             transition: 'opacity 0.3s ease, transform 0.3s ease',
-            opacity: showColors ? 1 : 0,
-            transform: showColors ? 'translateY(0)' : 'translateY(-10px)',
+            flexWrap: 'wrap', // Permet de passer à la ligne si nécessaire
+            maxWidth: '100%', // Limite la largeur pour éviter de sortir du cadre
           }}
         >
           {colors.map((color) => (
-            <IconButton
-              key={color}
-              onClick={() => setCvColor(color)}
-              sx={{
-                width: 14,
-                height: 14,
-                borderRadius: '50%',
-                backgroundColor: color,
-                border: '2px solid white',
-                boxShadow: '0px 2px 5px rgba(0,0,0,0.2)',
-                '&:hover': {
-                  transform: 'scale(1.1)',
-                  transition: 'transform 0.2s ease',
-                },
-              }}
-            />
+            <Tooltip title={color} key={color}>
+              <IconButton
+                onClick={() => { setCvColor(color); handleCloseColorMenu(); }}
+                sx={{
+                  width: 24,
+                  height: 24,
+                  borderRadius: '50%',
+                  backgroundColor: color,
+                  border: '2px solid white',
+                  boxShadow: '0px 2px 5px rgba(0,0,0,0.2)',
+                  '&:hover': {
+                    transform: 'scale(1.1)',
+                    transition: 'transform 0.2s ease',
+                  },
+                }}
+              />
+            </Tooltip>
           ))}
-          <IconButton onClick={() => setShowColors(false)}>
-            <Close />
-          </IconButton>
+          <Tooltip title="Fermer">
+            <IconButton onClick={handleCloseColorMenu}>
+              <Close />
+            </IconButton>
+          </Tooltip>
         </Box>
-      )}
+      </Popover>
 
-      <Box sx={{ display: 'flex', gap: 1 }}>
+      <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', justifyContent: 'center' }}>
         {activeFormIndex > 1 && (
-          <Button
-            variant="contained"
-            startIcon={<ArrowLeft />}
-            size="small"
-            sx={{ textTransform: 'none' }}
-            onClick={() => setActiveFormIndex(activeFormIndex - 1)}
-          >
-            Retour
-          </Button>
+          <Tooltip title="Retour">
+            <Button
+              variant="contained"
+              startIcon={<ArrowLeft />}
+              size="small"
+              sx={{ textTransform: 'none' }}
+              onClick={() => setActiveFormIndex(activeFormIndex - 1)}
+            >
+              Retour
+            </Button>
+          </Tooltip>
         )}
 
-        <Button
-          variant="contained"
-          endIcon={<ArrowRight />}
-          size="small"
-          sx={{ textTransform: 'none' }}
-          disabled={!enableNext}
-          onClick={() => setActiveFormIndex(activeFormIndex + 1)}
-        >
-          Suivant
-        </Button>
+        <Tooltip title="Suivant">
+          <Button
+            variant="contained"
+            endIcon={<ArrowRight />}
+            size="small"
+            sx={{ textTransform: 'none' }}
+            disabled={!enableNext}
+            onClick={() => setActiveFormIndex(activeFormIndex + 1)}
+          >
+            Suivant
+          </Button>
+        </Tooltip>
       </Box>
     </Box>
   );

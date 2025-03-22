@@ -7,6 +7,7 @@ import ResumePreview from "../components/ui/preview/ResumePreview";
 import { ResumeInfoContext } from "../context/ResumeInfoContext";
 import { GetOneResume } from "../api/resumes";
 import { ResumeStyleContext } from "../context/ResumeStyleContext";
+import ResumeFormSectionWrapper from "../components/sections/ResumeFormSection";
 
 function EditResume() {
 
@@ -49,11 +50,11 @@ function EditResume() {
   return (
     <ResumeStyleContext.Provider value={{ cvColor, setCvColor }}>
     <ResumeInfoContext.Provider value={{ resumeData,setResumeData }}>
-      <Box py={2}>
-        <Grid container spacing={2}>
+      <Box py={1}>
+        <Grid container spacing={1}>
           {/* Formulaire */}
           <Grid size={{ md: 6, xs: 12 }}>
-            <ResumeFormSection 
+            <ResumeFormSectionWrapper 
               resumeId={params?.resumeId}
             />
           </Grid>
