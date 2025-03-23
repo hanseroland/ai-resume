@@ -1,15 +1,14 @@
 import React from "react";
-import { Box, Typography, Chip, } from "@mui/material";
+import { Box, Typography, Chip } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 import Grid from '@mui/material/Grid2';
 
-
-const SkillsDetailPreview = ({ resumeData,cvColor }) => {
+const SkillsDetailPreview = ({ resumeData, cvColor }) => {
 
   const renderStars = (level) => {
     const stars = [];
     for (let i = 0; i < level; i++) {
-      stars.push(<StarIcon key={i} sx={{color:`${cvColor}`}} />);
+      stars.push(<StarIcon key={i} sx={{ color: `${cvColor}` }} />);
     }
     return stars;
   };
@@ -19,7 +18,7 @@ const SkillsDetailPreview = ({ resumeData,cvColor }) => {
       sx={{
         maxWidth: 600,
         mx: "auto",
-        p:3,
+        p:2,
       }}
     >
       {/* Titre de la section */}
@@ -28,6 +27,7 @@ const SkillsDetailPreview = ({ resumeData,cvColor }) => {
         fontWeight="bold"
         color="textPrimary"
         gutterBottom
+        fontSize={15}
         sx={{
           borderBottom: `2px solid ${cvColor}`,
           display: "inline-block",
@@ -41,24 +41,23 @@ const SkillsDetailPreview = ({ resumeData,cvColor }) => {
       <Grid container spacing={2}>
         {resumeData?.skills && resumeData?.skills.length > 0 ? (
           resumeData?.skills.map((skill, index) => (
-            <Grid size={{ xs:3, sm: 6 }} key={index}>
+            <Grid  size={{xs:12, sm:6}} key={index}>
               <Chip
                 label={skill?.name}
                 icon={<>{renderStars(skill?.level)}</>}
                 sx={{
-                  fontSize: "14px",
+                  fontSize: "12px", // Définit la taille de la police à 12px
                   fontWeight: "bold",
-                  //backgroundColor: "#000",
                   color: "#000",
                   "& .MuiChip-icon": {
-                    color:`${cvColor}`,
+                    color: `${cvColor}`,
                   },
                 }}
               />
             </Grid>
           ))
         ) : (
-          <Typography variant="body1" color="textSecondary">
+          <Typography variant="body1" color="textSecondary" sx={{ fontSize: 12 }}>
             Aucune compétence renseignée. Ajoutez vos compétences pour les mettre en avant.
           </Typography>
         )}

@@ -19,7 +19,18 @@ const FormStepper = ({ activeFormIndex }) => {
         },
       }}
     >
-      <Stepper activeStep={activeFormIndex - 1} alternativeLabel>
+      <Stepper
+        activeStep={activeFormIndex - 1}
+        alternativeLabel
+        sx={{
+          '& .MuiStep-root': {
+            padding: '0 4px', // Réduit l'espace entre les Steps
+          },
+          '& .MuiStepLabel-label': {
+            fontSize: '12px', // Définit la taille des StepLabel à 12px
+          },
+        }}
+      >
         {sections.map((section, index) => (
           <Step key={index}>
             <StepLabel>{getLabel(section)}</StepLabel>

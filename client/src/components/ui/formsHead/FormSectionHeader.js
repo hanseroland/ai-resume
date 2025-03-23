@@ -7,12 +7,9 @@ import SectionManager from './SectionManager';
 const colors = ['#000', '#4CAF50', '#FFEB3B', '#F44336', '#2196F3', '#9C27B0', '#E91E63', '#795548'];
 
 const FormSectionHeader = ({ activeFormIndex, setActiveFormIndex, enableNext }) => {
- 
   // Gérer les couleurs
   const [colorAnchorEl, setColorAnchorEl] = useState(null);
   const { setCvColor } = useContext(ResumeStyleContext); // Utilisation du contexte
-
-
 
   // Gérer le menu des couleurs
   const handleOpenColorMenu = (event) => {
@@ -43,7 +40,7 @@ const FormSectionHeader = ({ activeFormIndex, setActiveFormIndex, enableNext }) 
         }
       }}
     >
-      <Box sx={{ display: 'flex', gap: 1 }}>
+      <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', justifyContent: 'center' }}>
         <Tooltip title="Thèmes">
           <Button variant="outlined" startIcon={<Apps />} size="small" sx={{ textTransform: 'none' }}>
             Thèmes

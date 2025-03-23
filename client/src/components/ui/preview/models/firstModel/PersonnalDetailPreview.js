@@ -13,10 +13,10 @@ const PersonalDetailPreview = ({resumeData,cvColor}) => {
         <Grid container spacing={2} alignItems="center">
           {/* User Details */}
           <Grid>
-            <Typography variant="h5" component="div" fontWeight="bold">
+            <Typography fontSize={15} variant="h5" component="div" fontWeight="bold">
               {resumeData.personalInfo?.fullName}
             </Typography>
-            <Typography variant="subtitle1" color="text.secondary">
+            <Typography fontSize={12} variant="subtitle1" color="text.secondary">
               {resumeData.personalInfo?.jobTitle}
             </Typography>
           </Grid>
@@ -26,23 +26,23 @@ const PersonalDetailPreview = ({resumeData,cvColor}) => {
           {/* Address */}
           <Grid  size={{xs:6}} display="flex" alignItems="center">
             <LocationOn fontSize="small"  sx={{ mr: 1, color:`${cvColor}` }} />
-            <Typography variant="body2" color="text.secondary">
+            <Typography fontSize={12} variant="body2" color="text.secondary">
               {resumeData.personalInfo?.address}
             </Typography>
           </Grid>
 
           {/* Phone */}
-          <Grid size={{xs:6}}  display="flex" alignItems="center">
+          <Grid size={{xs:3}}  display="flex" alignItems="center">
             <Phone fontSize="small"  sx={{ mr: 1, color:`${cvColor}`  }} />
-            <Typography variant="body2" color="text.secondary">
+            <Typography fontSize={12} variant="body2" color="text.secondary">
               {resumeData.personalInfo?.phone}
             </Typography>
           </Grid>
 
           {/* Email */}
-          <Grid size={{xs:12}} display="flex" alignItems="center">
+          <Grid size={{xs:3}} display="flex" alignItems="center">
             <Email fontSize="small"  sx={{ mr: 1, color:`${cvColor}`  }} />
-            <Typography variant="body2" color="text.secondary">
+            <Typography fontSize={12} variant="body2" color="text.secondary">
               {resumeData.personalInfo?.email}
             </Typography>
           </Grid>

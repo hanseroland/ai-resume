@@ -1,16 +1,15 @@
 import React from "react";
-import { Box, Typography, Divider, Stack, } from "@mui/material";
+import { Box, Typography, Divider, Stack } from "@mui/material";
 import SchoolIcon from "@mui/icons-material/School";
 import Grid from '@mui/material/Grid2';
 
-
-const EducationDetailPreview = ({ resumeData,cvColor }) => {
+const EducationDetailPreview = ({ resumeData, cvColor }) => {
   return (
     <Box
       sx={{
         maxWidth: 800,
         mx: "auto",
-        p:3,
+        p: 3,
       }}
     >
       {/* Titre de la section */}
@@ -19,11 +18,12 @@ const EducationDetailPreview = ({ resumeData,cvColor }) => {
         fontWeight="bold"
         color="textPrimary"
         gutterBottom
+        fontSize={15}
         sx={{
           borderBottom: `2px solid ${cvColor}`,
           display: "inline-block",
           pb: 0.5,
-          mb:2,
+          mb: 2,
         }}
       >
         Parcours Éducatif
@@ -45,18 +45,18 @@ const EducationDetailPreview = ({ resumeData,cvColor }) => {
                   }}
                 />
               </Grid>
-              <Grid size={{xs:12,sm:10}}>
+              <Grid size={{xs:12, sm:10}}>
                 <Stack spacing={1}>
-                  <Typography variant="h6" fontWeight="bold">
+                  <Typography variant="h6" fontWeight="bold" fontSize={15}>
                     {edu.degree || "Diplôme non spécifié"}
                   </Typography>
-                  <Typography variant="body1" color="textSecondary">
+                  <Typography variant="body1" color="textSecondary" fontSize={12}>
                     {edu.schoolName || "Établissement non spécifié"} |{" "}
                     {edu.city && edu.country
                       ? `${edu.city}, ${edu.country}`
                       : "Lieu non spécifié"}
                   </Typography>
-                  <Typography variant="body2" color="textSecondary">
+                  <Typography variant="body2" color="textSecondary" fontSize={12}>
                     {`De ${new Date(edu.startDate).toLocaleDateString(
                       "fr-FR"
                     )} à ${
@@ -71,7 +71,7 @@ const EducationDetailPreview = ({ resumeData,cvColor }) => {
           </Box>
         ))
       ) : (
-        <Typography variant="body1" color="textSecondary">
+        <Typography variant="body1" color="textSecondary" fontSize={12}>
           Aucun parcours éducatif renseigné. Ajoutez vos diplômes et établissements pour les afficher ici.
         </Typography>
       )}

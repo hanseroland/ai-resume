@@ -10,7 +10,7 @@ function FormHead({title, description}) {
             sx={{
                 maxWidth: 800,
                 mx: "auto",
-                p:2,
+                p:1,
                 border: "1px solid #e0e0e0",
                 borderRadius: 4,
                 boxShadow: "0px 2px 6px rgba(0, 0, 0, 0.1)",
@@ -24,12 +24,14 @@ function FormHead({title, description}) {
                     fontWeight="bold"
                     color="textPrimary"
                     gutterBottom
+                    fontSize={15}
                 >
                     {title}
                 </Typography>
                 <Typography
                     variant="body1"
                     color="textSecondary"
+                    fontSize={12}
                 >
                     {description}
                 </Typography>
