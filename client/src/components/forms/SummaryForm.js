@@ -41,17 +41,23 @@ function SummaryForm({ enableNext, resumeId }) {
             setInitialValues({
                 summary: resumeData?.summary || "",
             });
+            enableNext(true);
+        }else{
+            enableNext(false);
         }
+
     }, [resumeData]); 
 
     const handleChange = (e, setFieldValue) => {
-        enableNext(false);
+        //enableNext(false);
         const { name, value } = e.target;
         setFieldValue(name, value);
         setResumeData((prev) => ({
             ...prev,
             [name]: value,
         }));
+        enableNext(value.trim() !== ""); // Activer le bouton "Suivant" si le champ n'est pas vide
+
     };
 
     const handleSubmit = async (values, { setSubmitting }) => {
@@ -140,7 +146,7 @@ function SummaryForm({ enableNext, resumeId }) {
             >
                 {resumeData ? (
                     <Formik
-                        key={resumeData.summary}
+                        //key={resumeData.summary}
                         enableReinitialize
                         initialValues={initialValues}
                         validationSchema={validationSchema}

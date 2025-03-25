@@ -52,6 +52,9 @@ function PersonalDetailForm({enableNext,resumeId}) {
           phone: resumeData.personalInfo.phone || "",
           email: resumeData.personalInfo.email || "",
         });
+        enableNext(true);
+      }else{
+        enableNext(false);
       }
     }, [resumeData]);
   

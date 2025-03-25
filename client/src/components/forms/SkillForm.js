@@ -21,10 +21,8 @@ export default function SkillForm({ enableNext, resumeId }) {
 
  
   // Fonction pour gérer la mise à jour en temps réel du contexte et du formulaire
-  const handleChangeSkill = (index, e) => {
+  const handleChangeSkill = (index,name, value) => {
     const newEntries = skillList.slice();
-    const { name, value } = e.target;
-
     // Validation pour limiter la valeur de level entre 0 et 5
     if (name === "level") {
       const numericValue = parseInt(value, 10);
@@ -32,7 +30,6 @@ export default function SkillForm({ enableNext, resumeId }) {
         return;
       }
     }
-
     newEntries[index][name] = value;
     setSkillList(newEntries);
   };
@@ -82,9 +79,9 @@ export default function SkillForm({ enableNext, resumeId }) {
               <span>Nom</span>
               <TextField
                 fullWidth
-                name="name"
+                //name="name"
                 value={item?.name}
-                onChange={(e) => handleChangeSkill(index, e)}
+                onChange={(e) => handleChangeSkill(index,'name', e.target.value)}
                 margin="dense"
               />
             </Grid>
@@ -92,9 +89,9 @@ export default function SkillForm({ enableNext, resumeId }) {
               <span>Niveau</span>
               <TextField
                 fullWidth
-                name="level"
+                //name="level"
                 value={item?.level}
-                onChange={(e) => handleChangeSkill(index, e)}
+                onChange={(e) => handleChangeSkill(index,'level', e.target.value)}
                 type="number"
                 margin="dense"
                 inputProps={{ min: 0, max: 5 }} // Ajout des attributs min et max

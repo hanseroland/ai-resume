@@ -8,7 +8,7 @@ const SkillsDetailPreview = ({ resumeData, cvColor }) => {
   const renderStars = (level) => {
     const stars = [];
     for (let i = 0; i < level; i++) {
-      stars.push(<StarIcon key={i} sx={{ color: `${cvColor}` }} />);
+      stars.push(<StarIcon fontSize="15px" key={i} sx={{ color: `${cvColor}` }} />);
     }
     return stars;
   };
@@ -41,7 +41,7 @@ const SkillsDetailPreview = ({ resumeData, cvColor }) => {
       <Grid container spacing={2}>
         {resumeData?.skills && resumeData?.skills.length > 0 ? (
           resumeData?.skills.map((skill, index) => (
-            <Grid  size={{xs:12, sm:6}} key={index}>
+            <Grid  size={{xs:6, sm:3}} key={index}>
               <Chip
                 label={skill?.name}
                 icon={<>{renderStars(skill?.level)}</>}

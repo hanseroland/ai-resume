@@ -491,6 +491,141 @@ router.put('/update-skills-info/:resumeId', async (req, res) => {
   }
 });
 
+// Route pour mettre à jour des projets d'un CV
+router.put('/update-projects-info/:resumeId', async (req, res) => {
+  const { resumeId } = req.params;
+  const  projects  = req.body;
+
+
+  try {
+    
+      const resume = await Resume.findById(resumeId);
+      if (!resume) {
+          return res.status(404).json({ success: false, error: 'CV introuvable.' });
+      }
+
+      // Mise à jour de projets existants avec `$set`
+      const updatedResume = await Resume.findByIdAndUpdate(
+          resumeId,
+          { $set: { projects: projects } }, // Remplace le champ `projects` tout en conservant les autres champs
+          { new: true, runValidators: true } // Retourne le document mis à jour et applique les validations
+      );
+
+      console.log("resume mDB",updatedResume)
+      res.status(200).json({
+          success: true,
+          message: "Projets mis à jour avec succès.",
+          data: updatedResume
+      });
+
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, error: "Une erreur est survenue lors de la mise à jour des informations d'experiences." });
+  }
+});
+
+// Route pour mettre à jour des certifications d'un CV
+router.put('/update-certifications-info/:resumeId', async (req, res) => {
+  const { resumeId } = req.params;
+  const  certifications  = req.body;
+
+
+  try {
+    
+      const resume = await Resume.findById(resumeId);
+      if (!resume) {
+          return res.status(404).json({ success: false, error: 'CV introuvable.' });
+      }
+
+      // Mise à jour de certifications existantes avec `$set`
+      const updatedResume = await Resume.findByIdAndUpdate(
+          resumeId,
+          { $set: { certifications: certifications } }, // Remplace le champ `certifications` tout en conservant les autres champs
+          { new: true, runValidators: true } // Retourne le document mis à jour et applique les validations
+      );
+
+      console.log("resume mDB",updatedResume)
+      res.status(200).json({
+          success: true,
+          message: "Certifications mises à jour avec succès.",
+          data: updatedResume
+      });
+
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, error: "Une erreur est survenue lors de la mise à jour des informations d'experiences." });
+  }
+});
+
+
+// Route pour mettre à jour les hobbies d'un CV
+router.put('/update-hobbies-info/:resumeId', async (req, res) => {
+  const { resumeId } = req.params;
+  const  hobbies  = req.body;
+
+
+  try {
+    
+      const resume = await Resume.findById(resumeId);
+      if (!resume) {
+          return res.status(404).json({ success: false, error: 'CV introuvable.' });
+      }
+
+      // Mise à jour des hobbies existants avec `$set`
+      const updatedResume = await Resume.findByIdAndUpdate(
+          resumeId,
+          { $set: { hobbies: hobbies } }, // Remplace le champ `hobbies` tout en conservant les autres champs
+          { new: true, runValidators: true } // Retourne le document mis à jour et applique les validations
+      );
+
+      console.log("resume mDB",updatedResume)
+      res.status(200).json({
+          success: true,
+          message: "hobbies mis à jour avec succès.",
+          data: updatedResume
+      });
+
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, error: "Une erreur est survenue lors de la mise à jour des informations d'experiences." });
+  }
+});
+
+
+// Route pour mettre à jour les langue d'un CV
+router.put('/update-languages-info/:resumeId', async (req, res) => {
+  const { resumeId } = req.params;
+  const  languages  = req.body;
+
+
+  try {
+    
+      const resume = await Resume.findById(resumeId);
+      if (!resume) {
+          return res.status(404).json({ success: false, error: 'CV introuvable.' });
+      }
+
+      // Mise à jour des langue existantes avec `$set`
+      const updatedResume = await Resume.findByIdAndUpdate(
+          resumeId,
+          { $set: { languages: languages } }, // Remplace le champ `languages` tout en conservant les autres champs
+          { new: true, runValidators: true } // Retourne le document mis à jour et applique les validations
+      );
+
+      console.log("resume mDB",updatedResume)
+      res.status(200).json({
+          success: true,
+          message: "Langues mises à jour avec succès.",
+          data: updatedResume
+      });
+
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, error: "Une erreur est survenue lors de la mise à jour des informations d'experiences." });
+  }
+});
+
+
 
 // Supprimer un utilisateur
 router.delete('/delete-resume/:id', async (req, res) => {
