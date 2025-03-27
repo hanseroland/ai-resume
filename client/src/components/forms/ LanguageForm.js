@@ -28,7 +28,7 @@ export default function LanguageForm({ enableNext, resumeId }) {
   };
 
   const addNewLanguage = () => {
-    setLanguageList([...languageList, formField]);
+    setLanguageList([...languageList,  {...formField}]);
   }
 
   const removeLanguage = () => {

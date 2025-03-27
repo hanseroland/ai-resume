@@ -44,7 +44,7 @@ export default function ExperienceForm({enableNext, resumeId}) {
   };
 
   const addNewExperience = () => {
-    setExperienceList([...experienceList, formField])
+    setExperienceList([...experienceList, {...formField} ])
   }
 
   const RemoveExperience = () => {

@@ -27,7 +27,7 @@ export default function HobbyForm({ enableNext, resumeId }) {
   };
 
   const addNewHobby = () => {
-    setHobbyList([...hobbyList, formField]);
+    setHobbyList([...hobbyList,  {...formField}]);
   }
 
   const removeHobby = () => {

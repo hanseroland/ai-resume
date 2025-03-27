@@ -35,7 +35,7 @@ export default function CertificationForm({ enableNext, resumeId }) {
   };
 
   const addNewCertification = () => {
-    setCertificationList([...certificationList, formField]);
+    setCertificationList([...certificationList,  {...formField}]);
   }
 
   const removeCertification = () => {

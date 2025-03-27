@@ -35,7 +35,7 @@ export default function SkillForm({ enableNext, resumeId }) {
   };
 
   const addNewSkill = () => {
-    setSkillList([...skillList, formField]);
+    setSkillList([...skillList,  {...formField}]);
   }
 
   const removeSkill = () => {

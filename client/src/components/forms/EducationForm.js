@@ -38,7 +38,7 @@ const EducationForm = ({ enableNext, resumeId }) => {
   };
 
   const addNewEducation = () => {
-    setEducationList([...educationList, formField])
+    setEducationList([...educationList,  {...formField}])
   }
 
   const removeEducation = () => {

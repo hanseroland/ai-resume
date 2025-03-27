@@ -30,7 +30,7 @@ export default function ProjectForm({ enableNext, resumeId }) {
   };
 
   const addNewProject = () => {
-    setProjectList([...projectList, formField]);
+    setProjectList([...projectList,  {...formField}]);
   }
 
   const removeProject = () => {
